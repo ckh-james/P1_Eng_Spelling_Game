@@ -372,7 +372,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 <!-- ══════════ HOME ══════════ -->
 <div id="home" class="screen active">
   <!-- Kuromi mascot — tap 5x to open admin -->
-  <svg class="kuromi-wrap" viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg" onclick="kuromTap()" id="kuromSvg">
+  <div id="kuromTapArea" style="line-height:0;cursor:pointer;-webkit-tap-highlight-color:transparent;padding:8px;">
+  <svg class="kuromi-wrap" viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg" id="kuromSvg">
     <path d="M62 78 Q55 50 72 42 Q82 56 88 72 Z" fill="#1a1a2e" stroke="#a855f7" stroke-width="2"/>
     <path d="M138 78 Q145 50 128 42 Q118 56 112 72 Z" fill="#1a1a2e" stroke="#a855f7" stroke-width="2"/>
     <circle cx="72" cy="40" r="9" fill="#e879f9" stroke="white" stroke-width="1.5"/>
@@ -421,19 +422,20 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     <text x="162" y="130" font-size="9" fill="#a855f7">✦</text>
     <text x="10" y="140" font-size="9" fill="#fbbf24">✦</text>
   </svg>
+  </div><!-- end kuromTapArea -->
   <div class="tap-hint">tap Kuromi 5× to manage word lists ⚙️</div>
 
   <h1>Kuromi's Spelling Quest</h1>
   <p class="subtitle" id="homeSubtitle">8 words · 3 spooky-cute games 🖤</p>
-  <div class="task-chip" id="homeTaskChip">📋 T3 Wk2 — Spelling List</div>
+  <div class="task-chip" id="homeTaskChip">📋 T3 Wk4 Task 3 — Spelling List</div>
 
   <div class="word-preview">
     <h3>🔑 Today's words</h3>
     <div class="word-pills" id="homePills">
-      <span class="word-pill">found</span><span class="word-pill">delicious</span>
-      <span class="word-pill">busy</span><span class="word-pill">bought</span>
-      <span class="word-pill">cake</span><span class="word-pill">snack</span>
-      <span class="word-pill">stall</span><span class="word-pill">ask</span>
+      <span class="word-pill">ride</span><span class="word-pill">hold</span>
+      <span class="word-pill">move</span><span class="word-pill">hug</span>
+      <span class="word-pill">wants</span><span class="word-pill">call</span>
+      <span class="word-pill">carry</span><span class="word-pill">share</span>
     </div>
   </div>
 
@@ -688,19 +690,19 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 // DEFAULT WORD LIST (loaded if nothing saved)
 // ════════════════════════════════════════════
 const DEFAULT_WORDS = [
-  {word:"found",    sentence:"I ___ my sister's shoe.",                               hint:"It means you discovered something that was missing 🔍"},
-  {word:"delicious",sentence:"The cake tastes ___.",                                  hint:"It means the food tastes really, really good 😋"},
-  {word:"busy",     sentence:"This is a ___ street with many people.",                hint:"Full of activity — lots of things happening 🏙️"},
-  {word:"bought",   sentence:"My father ___ us a big red lantern.",                   hint:"It means someone paid for something at a shop 🛒"},
-  {word:"cake",     sentence:"We still prefer a traditional ___.",                    hint:"A sweet baked food often eaten at birthdays 🎂"},
-  {word:"snack",    sentence:"John had dumplings during ___ break.",                  hint:"A small amount of food eaten between meals 🥟"},
-  {word:"stall",    sentence:"There is a long queue at the famous chicken rice ___.", hint:"A small counter selling food, common in hawker centres 🍚"},
-  {word:"ask",      sentence:'"What is the upcoming festival?" ___ the boys excitedly.',hint:"It means to say a question or make a request 🙋"}
+  {word:"ride",    sentence:"I ___ on a horse.",                                        hint:"To sit on an animal or vehicle and travel 🐴"},
+  {word:"hold",    sentence:"Please ___ onto the railings.",                            hint:"To grip or keep something firmly with your hands ✊"},
+  {word:"move",    sentence:"Please ___ the box there.",                                hint:"To take something from one place to another 📦"},
+  {word:"hug",     sentence:"I like to ___ my teddy bear.",                             hint:"To put your arms around something you love and squeeze 🤗"},
+  {word:"wants",   sentence:"Julie ___ to watch a movie.",                              hint:"It means to wish for or desire something 🎬"},
+  {word:"call",    sentence:"She needs to ___ the school office for help.",             hint:"To phone someone or shout out to get their attention 📞"},
+  {word:"carry",   sentence:"Can you help me ___ my bag?",                             hint:"To hold something and take it along with you 🎒"},
+  {word:"share",   sentence:"I will ___ the pizza with her.",                           hint:"To give part of something to someone else 🍕"}
 ];
 
 // QUESTIONS is mutable — overwritten by loadWordList() on startup
 let QUESTIONS = [];
-let currentTaskName = 'T3 Wk2 Task 1';
+let currentTaskName = 'T3 Wk4 Task 3';
 
 // ════════════════════════════════════════════
 // BUILD HINTS from stored item
@@ -768,17 +770,25 @@ let ttsCache={sentence:{1:'',2:'',3:''}};
 
 // ════════════════════════════════════════════
 // ADMIN — Kuromi tap unlock
+// Uses touchstart (not click) for mobile reliability
 // ════════════════════════════════════════════
-let tapCount=0, tapTimer=null;
+let tapCount=0, tapTimer=null, lastTapTime=0;
+
 function kuromTap(){
   tapCount++;
-  // Visual pulse
+  // Visual + text feedback so user knows tap registered
   const svg = document.getElementById('kuromSvg');
-  svg.style.filter='drop-shadow(0 0 18px #e879f9)';
-  setTimeout(()=>{ svg.style.filter='drop-shadow(0 8px 18px rgba(168,85,247,.45))'; },300);
+  const hint = document.querySelector('.tap-hint');
+  svg.style.filter='drop-shadow(0 0 22px #e879f9) drop-shadow(0 0 8px #fbbf24)';
+  setTimeout(()=>{ svg.style.filter='drop-shadow(0 8px 18px rgba(168,85,247,.45))'; },350);
+  const remaining = 5 - tapCount;
+  if(hint && remaining > 0) hint.textContent = `${tapCount} / 5 — ${remaining} more tap${remaining===1?'':'s'} to unlock ⚙️`;
   if(tapTimer) clearTimeout(tapTimer);
-  tapTimer = setTimeout(()=>{ tapCount=0; }, 2500);
-  if(tapCount>=5){ tapCount=0; openAdmin(); }
+  tapTimer = setTimeout(()=>{
+    tapCount=0;
+    if(hint) hint.textContent='tap Kuromi 5× to manage word lists ⚙️';
+  }, 2500);
+  if(tapCount>=5){ tapCount=0; if(hint) hint.textContent='tap Kuromi 5× to manage word lists ⚙️'; openAdmin(); }
 }
 
 function openAdmin(){
@@ -1402,6 +1412,22 @@ if(window.speechSynthesis){
     window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
   }
 }
+// ── Kuromi tap area — touchstart for mobile, click for desktop
+// Using touchstart because SVG onclick is unreliable on Android/iOS
+(function(){
+  const area = document.getElementById('kuromTapArea');
+  if(!area) return;
+  let lastEvt = 0;
+  function handleTap(e){
+    e.preventDefault(); // prevent ghost click on touch devices
+    const now = Date.now();
+    if(now - lastEvt < 150) return; // debounce: ignore double-fire within 150ms
+    lastEvt = now;
+    kuromTap();
+  }
+  area.addEventListener('touchstart', handleTap, {passive:false});
+  area.addEventListener('click', handleTap);
+})();
 // Load saved word list on startup
 loadWordList();
 </script>
