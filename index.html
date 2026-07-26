@@ -325,8 +325,16 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 .results-score{font-size:3rem;font-weight:700;color:var(--accent2);margin:10px 0;font-family:var(--body-f);}
 .results-msg{font-size:.9rem;color:var(--text-sub);font-weight:700;margin-bottom:22px;line-height:1.7;}
 
-/* ══════════ ADMIN PANEL ══════════ */
-#adminPanel{background:var(--admin-bg);min-height:100vh;}
+/* ══════════ ADMIN PANEL — fixed overlay, independent of screen system ══════════ */
+#adminPanel{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:300;
+  background:var(--admin-bg);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
 .admin-content{padding:14px;max-width:600px;margin:0 auto;overflow-y:auto;}
 .admin-section{background:var(--card);border-radius:18px;padding:15px 17px;margin-bottom:13px;border:1.5px solid var(--card-border);}
 .admin-section h3{font-family:var(--title-f);font-size:1rem;color:var(--text-sub);margin-bottom:12px;}
@@ -353,6 +361,23 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 .admin-error.visible{display:block;}
 .admin-success{background:var(--correct-bg);border:2px solid var(--correct-bd);border-radius:12px;padding:12px 15px;color:var(--correct-col);font-family:var(--body-f);font-size:.86rem;margin-bottom:12px;display:none;}
 .admin-success.visible{display:block;}
+
+/* ══════════ WORD SEARCH (Game 4) ══════════ */
+.ws-found-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.ws-found-badge{background:var(--score-bg);border:1.5px solid var(--card-border);border-radius:20px;padding:5px 13px;font-weight:700;font-size:.86rem;color:var(--score-col);font-family:var(--body-f);}
+.ws-word-list{background:var(--card);border:1.5px solid var(--card-border);border-radius:16px;padding:12px 14px;margin-bottom:12px;}
+.ws-word-list-label{font-family:var(--title-f);font-size:.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;}
+.ws-chips{display:flex;flex-wrap:wrap;gap:7px;}
+.ws-chip{padding:6px 13px;border-radius:20px;font-family:var(--body-f);font-weight:700;font-size:.88rem;letter-spacing:var(--ls);background:var(--bg2);color:var(--text-sub);border:1.5px solid var(--card-border);cursor:pointer;transition:all .2s;-webkit-user-select:none;user-select:none;}
+.ws-chip:hover{border-color:var(--accent1);}
+.ws-chip.found{text-decoration:line-through;opacity:.65;cursor:default;transform:scale(.95);}
+.ws-grid-wrap{background:var(--card);border:1.5px solid var(--card-border);border-radius:16px;padding:10px;margin-bottom:12px;touch-action:none;-webkit-user-select:none;user-select:none;}
+.ws-grid{display:grid;gap:2px;width:100%;}
+.ws-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--body-f);font-weight:700;border-radius:5px;background:var(--bg2);color:var(--text-main);border:1px solid var(--card-border);-webkit-user-select:none;user-select:none;transition:background .08s,transform .08s;}
+.ws-cell.selected{background:var(--accent1)!important;color:white!important;border-color:var(--accent2)!important;transform:scale(1.1);}
+.ws-cell.found{border-color:transparent!important;transform:none!important;}
+.ws-complete{display:none;flex-direction:column;align-items:center;gap:12px;background:var(--correct-bg);border:2px solid var(--correct-bd);border-radius:18px;padding:22px 18px;text-align:center;margin-bottom:12px;}
+.ws-hint-note{font-size:.75rem;color:var(--text-muted);font-family:var(--body-f);text-align:center;margin-bottom:8px;}
 
 /* ══════════ CONFETTI ══════════ */
 .confetti-piece{position:fixed;border-radius:2px;animation:confettiFall linear forwards;z-index:999;pointer-events:none;}
@@ -426,16 +451,16 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
   <div class="tap-hint">tap Kuromi 5× to manage word lists ⚙️</div>
 
   <h1>Kuromi's Spelling Quest</h1>
-  <p class="subtitle" id="homeSubtitle">8 words · 3 spooky-cute games 🖤</p>
-  <div class="task-chip" id="homeTaskChip">📋 T3 Wk4 Task 3 — Spelling List</div>
+  <p class="subtitle" id="homeSubtitle">8 words · 4 spooky-cute games 🖤</p>
+  <div class="task-chip" id="homeTaskChip">📋 T3 Wk5 Task 4 — Spelling List</div>
 
   <div class="word-preview">
     <h3>🔑 Today's words</h3>
     <div class="word-pills" id="homePills">
-      <span class="word-pill">ride</span><span class="word-pill">hold</span>
-      <span class="word-pill">move</span><span class="word-pill">hug</span>
-      <span class="word-pill">wants</span><span class="word-pill">call</span>
-      <span class="word-pill">carry</span><span class="word-pill">share</span>
+      <span class="word-pill">close</span><span class="word-pill">read</span>
+      <span class="word-pill">answer</span><span class="word-pill">stool</span>
+      <span class="word-pill">write</span><span class="word-pill">learn</span>
+      <span class="word-pill">teacher</span><span class="word-pill">copy</span>
     </div>
   </div>
 
@@ -443,6 +468,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     <div class="game-card" onclick="startGame(1)"><div class="icon">✏️</div><div><h2>Fill in the Blank</h2><p>Write the missing word in the sentence</p></div></div>
     <div class="game-card" onclick="startGame(2)"><div class="icon">🃏</div><div><h2>Word Rescue</h2><p>Pick the right word for the sentence</p></div></div>
     <div class="game-card" onclick="startGame(3)"><div class="icon">🔤</div><div><h2>Letter Detective</h2><p>Tap letters to spell the missing word</p></div></div>
+    <div class="game-card" onclick="startGame4()"><div class="icon">🔍</div><div><h2>Word Search</h2><p>Find all the spelling words in the grid</p></div></div>
   </div>
 </div>
 
@@ -599,6 +625,45 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
   </div>
 </div>
 
+<!-- ══════════ GAME 4 — WORD SEARCH ══════════ -->
+<div id="game4" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="game-title">🔍 Word Search</div>
+    <div class="progress-wrap">
+      <div class="progress-pill" id="g4-found">0 / 8 found</div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="g4-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="game-content">
+    <!-- Words to find -->
+    <div class="ws-word-list">
+      <div class="ws-word-list-label">🔑 Find these words — tap a word for a hint</div>
+      <div class="ws-chips" id="ws-chips"></div>
+    </div>
+    <!-- Grid -->
+    <div class="ws-hint-note">Drag across letters to select · words go in all directions ↔↕↗↘</div>
+    <div class="ws-grid-wrap" id="ws-grid-wrap">
+      <div class="ws-grid" id="ws-grid"></div>
+    </div>
+    <!-- Controls -->
+    <div class="btn-row" style="margin-bottom:12px;">
+      <button class="btn btn-primary" onclick="wsNewPuzzle()">🔀 New Puzzle</button>
+      <button class="btn btn-skip" onclick="goHome()">🏠 Home</button>
+    </div>
+    <!-- Completion overlay -->
+    <div class="ws-complete" id="ws-complete">
+      <div style="font-size:3rem;">🎉</div>
+      <div style="font-family:var(--title-f);font-size:1.6rem;color:var(--correct-col);">All words found!</div>
+      <div style="font-size:.9rem;color:var(--text-sub);font-family:var(--body-f);">Amazing work! 🖤</div>
+      <div class="btn-row" style="width:100%;margin-top:4px;">
+        <button class="btn btn-next" onclick="wsNewPuzzle()">🔀 Play Again</button>
+        <button class="btn btn-primary" onclick="goHome()">🏠 Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════ RESULTS ══════════ -->
 <div id="results" class="screen">
   <div class="results-card">
@@ -614,7 +679,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 </div>
 
 <!-- ══════════ ADMIN PANEL ══════════ -->
-<div id="adminPanel" class="screen">
+<div id="adminPanel">
   <div class="game-header">
     <button class="back-btn" onclick="closeAdmin()">←</button>
     <div class="game-title">⚙️ Word List Editor</div>
@@ -690,19 +755,19 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 // DEFAULT WORD LIST (loaded if nothing saved)
 // ════════════════════════════════════════════
 const DEFAULT_WORDS = [
-  {word:"ride",    sentence:"I ___ on a horse.",                                        hint:"To sit on an animal or vehicle and travel 🐴"},
-  {word:"hold",    sentence:"Please ___ onto the railings.",                            hint:"To grip or keep something firmly with your hands ✊"},
-  {word:"move",    sentence:"Please ___ the box there.",                                hint:"To take something from one place to another 📦"},
-  {word:"hug",     sentence:"I like to ___ my teddy bear.",                             hint:"To put your arms around something you love and squeeze 🤗"},
-  {word:"wants",   sentence:"Julie ___ to watch a movie.",                              hint:"It means to wish for or desire something 🎬"},
-  {word:"call",    sentence:"She needs to ___ the school office for help.",             hint:"To phone someone or shout out to get their attention 📞"},
-  {word:"carry",   sentence:"Can you help me ___ my bag?",                             hint:"To hold something and take it along with you 🎒"},
-  {word:"share",   sentence:"I will ___ the pizza with her.",                           hint:"To give part of something to someone else 🍕"}
+  {word:"close",   sentence:"Please ___ the window.",                               hint:"To shut something so it is no longer open 🚪"},
+  {word:"read",    sentence:"I ___ a book every day.",                              hint:"To look at words and understand them 📖"},
+  {word:"answer",  sentence:"Can you ___ the call?",                               hint:"To respond to a question or pick up the phone 📞"},
+  {word:"stool",   sentence:"I sat on a ___ to rest my feet.",                     hint:"A seat with no back, like a small chair 🪑"},
+  {word:"write",   sentence:"We ___ a letter to our friend.",                      hint:"To make words on paper with a pen or pencil ✏️"},
+  {word:"learn",   sentence:"She wants to ___ how to dance.",                      hint:"To gain new knowledge or a new skill 🎓"},
+  {word:"teacher", sentence:"My ___ is telling us how to play the game.",          hint:"A person whose job is to help children learn at school 👩‍🏫"},
+  {word:"copy",    sentence:"We ___ the words neatly from the whiteboard.",        hint:"To write or draw something exactly the same as another 📋"}
 ];
 
 // QUESTIONS is mutable — overwritten by loadWordList() on startup
 let QUESTIONS = [];
-let currentTaskName = 'T3 Wk4 Task 3';
+let currentTaskName = 'T3 Wk5 Task 4';
 
 // ════════════════════════════════════════════
 // BUILD HINTS from stored item
@@ -753,7 +818,7 @@ function updateHomeUI(){
   const pillsEl = document.getElementById('homePills');
   if(pillsEl) pillsEl.innerHTML = QUESTIONS.map(q=>`<span class="word-pill">${q.word}</span>`).join('');
   const subEl = document.getElementById('homeSubtitle');
-  if(subEl) subEl.textContent = `${n} word${n===1?'':'s'} · 3 spooky-cute games 🖤`;
+  if(subEl) subEl.textContent = `${n} word${n===1?'':'s'} · 4 spooky-cute games 🖤`;
   const chipEl = document.getElementById('homeTaskChip');
   if(chipEl) chipEl.textContent = `📋 ${currentTaskName}`;
 }
@@ -801,16 +866,19 @@ function openAdmin(){
       <span class="admin-sent">${q.sentence}</span>
     </div>`
   ).join('');
-  // Pre-fill task name
   document.getElementById('adminTaskName').value = currentTaskName;
-  // Reset paste area
   document.getElementById('adminPaste').value='';
   document.getElementById('adminPreviewSection').style.display='none';
   hideAdminMsg();
-  showScreen('adminPanel');
+  // Show as fixed overlay — does NOT disturb the game screen system
+  const panel = document.getElementById('adminPanel');
+  panel.style.display = 'block';
+  panel.scrollTop = 0;
 }
 
-function closeAdmin(){ showScreen('home'); }
+function closeAdmin(){
+  document.getElementById('adminPanel').style.display = 'none';
+}
 
 function clearAdminPaste(){
   document.getElementById('adminPaste').value='';
@@ -1393,6 +1461,254 @@ async function downloadUpdatedFile(){
 }
 
 // ════════════════════════════════════════════
+// GAME 4 — WORD SEARCH
+// Random puzzle every time: shuffled word order,
+// randomised direction & position per word → huge variety
+// ════════════════════════════════════════════
+const WS_COLORS = ['#86efac','#6EC6F5','#fbbf24','#f9a8d4','#c4b5fd','#fca5a5','#a7f3d0','#fde68a'];
+const WS_DIRS   = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]; // 8 directions
+let WS_SIZE = 12;
+let wsGrid=[], wsWordPlacements=[], wsFoundWords=new Set();
+let wsStartCell=null, wsCurrentCell=null, wsSelCells=[], wsCellEls=[];
+let wsMouseHeld=false, wsEventsSet=false;
+
+/* ── Entry point ── */
+function startGame4(){
+  currentGame=4; currentRetry=4;
+  wsNewPuzzle();
+  showScreen('game4');
+}
+
+function wsNewPuzzle(){
+  wsFoundWords=new Set();
+  wsStartCell=null; wsCurrentCell=null; wsSelCells=[];
+  document.getElementById('ws-complete').style.display='none';
+  wsGenerate();
+  wsRender();
+  wsSetupEvents();
+}
+
+/* ── Puzzle generation ── */
+function wsGenerate(){
+  // Grid size = max(12, longest_word + 5) — fits all words comfortably
+  WS_SIZE = Math.max(12, Math.max(...QUESTIONS.map(q=>q.word.length)) + 5);
+  wsGrid = Array.from({length:WS_SIZE},()=>Array(WS_SIZE).fill(''));
+  wsWordPlacements = [];
+  // Shuffle word order → different spatial layout each run
+  const words = shuffle(QUESTIONS.map(q=>q.word.toUpperCase()));
+  for(const w of words) wsPlaceWord(w);
+  // Fill blanks with random letters
+  const ABC='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let r=0;r<WS_SIZE;r++) for(let c=0;c<WS_SIZE;c++)
+    if(!wsGrid[r][c]) wsGrid[r][c]=ABC[Math.floor(Math.random()*26)];
+}
+
+function wsPlaceWord(word){
+  const dirs=shuffle(WS_DIRS); // try directions in random order
+  for(const [dr,dc] of dirs){
+    const minR=dr<0?word.length-1:0, maxR=dr>0?WS_SIZE-word.length:WS_SIZE-1;
+    const minC=dc<0?word.length-1:0, maxC=dc>0?WS_SIZE-word.length:WS_SIZE-1;
+    if(minR>maxR||minC>maxC) continue;
+    // Build all candidate start positions and shuffle for randomness
+    const pos=[];
+    for(let r=minR;r<=maxR;r++) for(let c=minC;c<=maxC;c++) pos.push([r,c]);
+    for(const [r,c] of shuffle(pos)){
+      let ok=true;
+      for(let i=0;i<word.length;i++){
+        const gr=r+i*dr, gc=c+i*dc;
+        if(wsGrid[gr][gc]&&wsGrid[gr][gc]!==word[i]){ok=false;break;}
+      }
+      if(ok){
+        for(let i=0;i<word.length;i++) wsGrid[r+i*dr][c+i*dc]=word[i];
+        wsWordPlacements.push({word,r,c,dr,dc});
+        return;
+      }
+    }
+  }
+}
+
+/* ── Render ── */
+function wsRender(){
+  const total=QUESTIONS.length;
+  document.getElementById('g4-found').textContent=`${wsFoundWords.size} / ${total} found`;
+  document.getElementById('g4-bar').style.width=(wsFoundWords.size/total*100)+'%';
+
+  // Word chips — tap for hint
+  document.getElementById('ws-chips').innerHTML = QUESTIONS.map((q,i)=>{
+    const uw=q.word.toUpperCase(), found=wsFoundWords.has(uw);
+    const col=WS_COLORS[i%WS_COLORS.length];
+    return `<span class="ws-chip${found?' found':''}" id="ws-chip-${i}"
+      onclick="wsHint(${i})"
+      style="${found?`background:${col};color:#1a1a2e;border-color:${col};`:''}">
+      ${q.word}${found?' ✓':''}
+    </span>`;
+  }).join('');
+
+  // Grid
+  const gridEl=document.getElementById('ws-grid');
+  gridEl.style.gridTemplateColumns=`repeat(${WS_SIZE},1fr)`;
+  gridEl.innerHTML='';
+  wsCellEls=[];
+  // Font size scales with grid — keep readable on mobile
+  const fs=`clamp(9px,${(100/WS_SIZE*.55).toFixed(1)}vw,13px)`;
+  for(let r=0;r<WS_SIZE;r++){
+    const row=[];
+    for(let c=0;c<WS_SIZE;c++){
+      const el=document.createElement('div');
+      el.className='ws-cell';
+      el.textContent=wsGrid[r][c];
+      el.dataset.r=r; el.dataset.c=c;
+      el.style.fontSize=fs;
+      gridEl.appendChild(el);
+      row.push(el);
+    }
+    wsCellEls.push(row);
+  }
+
+  // Re-colour already found words (when calling wsNewPuzzle mid-game)
+  for(const pl of wsWordPlacements){
+    if(!wsFoundWords.has(pl.word)) continue;
+    const idx=QUESTIONS.findIndex(q=>q.word.toUpperCase()===pl.word);
+    const col=WS_COLORS[idx%WS_COLORS.length];
+    for(let i=0;i<pl.word.length;i++){
+      const el=wsCellEls[pl.r+i*pl.dr]?.[pl.c+i*pl.dc];
+      if(el){el.classList.add('found');el.style.background=col;el.style.color='#1a1a2e';}
+    }
+  }
+}
+
+/* ── Event setup (once per session, event-delegation on wrap) ── */
+function wsSetupEvents(){
+  if(wsEventsSet) return;
+  wsEventsSet=true;
+  const wrap=document.getElementById('ws-grid-wrap');
+
+  // Touch
+  wrap.addEventListener('touchstart', e=>{
+    e.preventDefault();
+    wsStartCell=wsCellAt(e.touches[0].clientX,e.touches[0].clientY);
+    wsCurrentCell=wsStartCell;
+    wsHighlight();
+  },{passive:false});
+  wrap.addEventListener('touchmove', e=>{
+    e.preventDefault();
+    const cell=wsCellAt(e.touches[0].clientX,e.touches[0].clientY);
+    if(cell&&cell!==wsCurrentCell){wsCurrentCell=cell;wsHighlight();}
+  },{passive:false});
+  wrap.addEventListener('touchend', e=>{
+    e.preventDefault();
+    wsCheck();
+    wsStartCell=null; wsCurrentCell=null; wsHighlight();
+  },{passive:false});
+
+  // Mouse (desktop)
+  wrap.addEventListener('mousedown', e=>{
+    wsMouseHeld=true;
+    wsStartCell=e.target.closest('.ws-cell');
+    wsCurrentCell=wsStartCell;
+    wsHighlight();
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!wsMouseHeld) return;
+    const cell=e.target.closest?.('.ws-cell')||document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.ws-cell');
+    if(cell&&cell!==wsCurrentCell){wsCurrentCell=cell;wsHighlight();}
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(!wsMouseHeld) return;
+    wsMouseHeld=false; wsCheck();
+    wsStartCell=null; wsCurrentCell=null; wsHighlight();
+  });
+}
+
+function wsCellAt(x,y){
+  const el=document.elementFromPoint(x,y);
+  return el?.classList.contains('ws-cell')?el:null;
+}
+
+/* ── Selection line ── */
+function wsLineCells(a,b){
+  if(!a) return [];
+  if(!b||a===b) return [a];
+  const r1=+a.dataset.r,c1=+a.dataset.c,r2=+b.dataset.r,c2=+b.dataset.c;
+  const dr=r2-r1,dc=c2-c1;
+  // Only straight lines (h, v, diagonal)
+  if(dr!==0&&dc!==0&&Math.abs(dr)!==Math.abs(dc)) return [a];
+  const steps=Math.max(Math.abs(dr),Math.abs(dc));
+  const sdr=dr===0?0:dr/Math.abs(dr), sdc=dc===0?0:dc/Math.abs(dc);
+  const cells=[];
+  for(let i=0;i<=steps;i++){
+    const el=wsCellEls[r1+i*sdr]?.[c1+i*sdc];
+    if(el) cells.push(el);
+  }
+  return cells;
+}
+
+function wsHighlight(){
+  // Clear previous selection highlight (not found)
+  wsSelCells.forEach(el=>{if(!el.classList.contains('found'))el.classList.remove('selected');});
+  wsSelCells=wsLineCells(wsStartCell,wsCurrentCell);
+  wsSelCells.forEach(el=>{if(!el.classList.contains('found'))el.classList.add('selected');});
+}
+
+/* ── Check selection against word list ── */
+function wsCheck(){
+  if(wsSelCells.length<2) return;
+  const fwd=wsSelCells.map(el=>el.textContent).join('');
+  const rev=fwd.split('').reverse().join('');
+  const match=QUESTIONS.find(q=>{
+    const uw=q.word.toUpperCase();
+    return (fwd===uw||rev===uw)&&!wsFoundWords.has(uw);
+  });
+  if(!match) return;
+
+  // Mark found
+  const uw=match.word.toUpperCase();
+  const idx=QUESTIONS.findIndex(q=>q.word===match.word);
+  const col=WS_COLORS[idx%WS_COLORS.length];
+  wsSelCells.forEach(el=>{
+    el.classList.remove('selected'); el.classList.add('found');
+    el.style.background=col; el.style.color='#1a1a2e';
+  });
+  wsFoundWords.add(uw);
+
+  // Update chip
+  const chip=document.getElementById(`ws-chip-${idx}`);
+  if(chip){chip.classList.add('found');chip.style.cssText=`background:${col};color:#1a1a2e;border-color:${col};`; chip.textContent=match.word+' ✓';}
+
+  // Update counter
+  const total=QUESTIONS.length;
+  document.getElementById('g4-found').textContent=`${wsFoundWords.size} / ${total} found`;
+  document.getElementById('g4-bar').style.width=(wsFoundWords.size/total*100)+'%';
+
+  launchConfetti(12);
+
+  if(wsFoundWords.size>=total){
+    setTimeout(()=>{
+      document.getElementById('ws-complete').style.display='flex';
+      launchConfetti(50);
+    },600);
+  }
+}
+
+/* ── Hint: tap a word chip → flash its first letter ── */
+function wsHint(idx){
+  const uw=QUESTIONS[idx]?.word?.toUpperCase();
+  if(!uw||wsFoundWords.has(uw)) return;
+  const pl=wsWordPlacements.find(p=>p.word===uw);
+  if(!pl) return;
+  const el=wsCellEls[pl.r]?.[pl.c];
+  if(!el) return;
+  el.style.transition='all .15s';
+  el.style.background=WS_COLORS[idx%WS_COLORS.length];
+  el.style.color='#1a1a2e';
+  el.style.transform='scale(1.25)';
+  setTimeout(()=>{
+    el.style.background=''; el.style.color=''; el.style.transform='';
+    setTimeout(()=>{ el.style.transition=''; },200);
+  },700);
+}
+
+// ════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════
 window.addEventListener('resize',()=>{
@@ -1412,21 +1728,20 @@ if(window.speechSynthesis){
     window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
   }
 }
-// ── Kuromi tap area — touchstart for mobile, click for desktop
-// Using touchstart because SVG onclick is unreliable on Android/iOS
+// ── Kuromi tap unlock — pointerdown is the most reliable event on
+//    Android Chrome, Samsung Browser, iOS Safari, and desktop.
+//    Unlike touchstart+click, pointerdown fires exactly once per tap.
 (function(){
   const area = document.getElementById('kuromTapArea');
   if(!area) return;
   let lastEvt = 0;
-  function handleTap(e){
-    e.preventDefault(); // prevent ghost click on touch devices
+  area.addEventListener('pointerdown', function(e){
+    e.preventDefault();
     const now = Date.now();
-    if(now - lastEvt < 150) return; // debounce: ignore double-fire within 150ms
+    if(now - lastEvt < 200) return; // debounce: ignore within 200ms
     lastEvt = now;
     kuromTap();
-  }
-  area.addEventListener('touchstart', handleTap, {passive:false});
-  area.addEventListener('click', handleTap);
+  });
 })();
 // Load saved word list on startup
 loadWordList();
