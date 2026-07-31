@@ -362,6 +362,33 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 .admin-success{background:var(--correct-bg);border:2px solid var(--correct-bd);border-radius:12px;padding:12px 15px;color:var(--correct-col);font-family:var(--body-f);font-size:.86rem;margin-bottom:12px;display:none;}
 .admin-success.visible{display:block;}
 
+/* ══════════ OCR SECTION ══════════ */
+.ocr-step{margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid var(--card-border);}
+.ocr-step:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.ocr-step-title{font-family:var(--body-f);font-weight:700;font-size:.88rem;color:var(--text-sub);display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.ocr-step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:white;font-size:.72rem;font-weight:700;flex-shrink:0;}
+.ocr-note{font-family:var(--body-f);font-size:.75rem;color:var(--text-muted);margin-bottom:8px;line-height:1.55;}
+.ocr-upload-label{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:white;border-radius:12px;padding:13px 16px;text-align:center;font-family:var(--body-f);font-weight:700;font-size:.9rem;cursor:pointer;width:100%;transition:opacity .2s;}
+.ocr-upload-label:hover{opacity:.88;}
+#ocrPreviewImg{width:100%;border-radius:10px;border:2px solid var(--card-border);margin-top:10px;display:none;}
+.ocr-status{font-family:var(--body-f);font-size:.84rem;padding:10px 12px;border-radius:10px;margin-top:10px;display:none;line-height:1.6;}
+.ocr-status.info{background:var(--score-bg);color:var(--text-sub);}
+.ocr-status.success{background:var(--correct-bg);color:var(--correct-col);}
+.ocr-status.error{background:var(--wrong-bg);color:var(--wrong-col);}
+.ocr-key-row{display:flex;gap:7px;align-items:stretch;}
+.ocr-key-input{flex:1;padding:9px 12px;font-family:var(--body-f);font-size:.86rem;border:1.5px solid var(--card-border);border-radius:10px;background:var(--admin-textarea-bg);color:var(--text-main);outline:none;}
+.ocr-key-input:focus{border-color:var(--accent1);}
+.ocr-key-save{background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;border-radius:10px;padding:0 15px;color:white;font-family:var(--body-f);font-weight:700;font-size:.84rem;cursor:pointer;}
+.ocr-key-status{font-size:.73rem;font-family:var(--body-f);margin-top:5px;}
+.ocr-review-row{background:var(--hint-step-bg);border-radius:12px;padding:12px 13px;margin-bottom:9px;border:1.5px solid var(--card-border);}
+.ocr-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.ocr-row-label{font-family:var(--body-f);font-size:.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;}
+.ocr-row-del{background:var(--wrong-bg);border:1.5px solid var(--wrong-bd);border-radius:7px;padding:4px 10px;font-family:var(--body-f);font-size:.74rem;color:var(--wrong-col);cursor:pointer;}
+.ocr-field-label{font-family:var(--body-f);font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.ocr-field-input{width:100%;padding:9px 11px;font-family:var(--body-f);font-size:.88rem;border:1.5px solid var(--card-border);border-radius:9px;background:var(--admin-textarea-bg);color:var(--text-main);outline:none;margin-bottom:9px;transition:border-color .2s;}
+.ocr-field-input:focus{border-color:var(--accent1);}
+.ocr-field-input:last-child{margin-bottom:0;}
+
 /* ══════════ WORD SEARCH (Game 4) ══════════ */
 .ws-found-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .ws-found-badge{background:var(--score-bg);border:1.5px solid var(--card-border);border-radius:20px;padding:5px 13px;font-weight:700;font-size:.86rem;color:var(--score-col);font-family:var(--body-f);}
@@ -376,8 +403,19 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 .ws-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--body-f);font-weight:700;border-radius:5px;background:var(--bg2);color:var(--text-main);border:1px solid var(--card-border);-webkit-user-select:none;user-select:none;transition:background .08s,transform .08s;}
 .ws-cell.selected{background:var(--accent1)!important;color:white!important;border-color:var(--accent2)!important;transform:scale(1.1);}
 .ws-cell.found{border-color:transparent!important;transform:none!important;}
+.ws-mode-row{display:flex;gap:8px;margin-bottom:12px;}
+.ws-mode-btn{flex:1;padding:9px 6px;border:2px solid var(--card-border);border-radius:12px;background:var(--card);font-family:var(--body-f);font-weight:700;font-size:.82rem;cursor:pointer;color:var(--text-muted);transition:all .2s;text-align:center;}
+.ws-mode-btn.active{border-color:var(--accent1);color:var(--accent1);background:rgba(168,85,247,.1);}
+.ws-mode-btn:hover{border-color:var(--accent2);}
 .ws-complete{display:none;flex-direction:column;align-items:center;gap:12px;background:var(--correct-bg);border:2px solid var(--correct-bd);border-radius:18px;padding:22px 18px;text-align:center;margin-bottom:12px;}
 .ws-hint-note{font-size:.75rem;color:var(--text-muted);font-family:var(--body-f);text-align:center;margin-bottom:8px;}
+
+/* ── OCR provider toggle ── */
+.ocr-provider-row{display:flex;gap:8px;margin-bottom:12px;}
+.ocr-provider-btn{flex:1;padding:9px 6px;border:2px solid var(--card-border);border-radius:12px;background:var(--card);font-family:var(--body-f);font-weight:700;font-size:.82rem;cursor:pointer;color:var(--text-muted);transition:all .2s;text-align:center;line-height:1.4;}
+.ocr-provider-btn:hover{border-color:var(--accent1);}
+.ocr-provider-btn.active-gemini{border-color:#4ade80;color:#15803d;background:rgba(74,222,128,.1);}
+.ocr-provider-btn.active-claude{border-color:var(--accent1);color:var(--accent1);background:rgba(168,85,247,.1);}
 
 /* ══════════ CONFETTI ══════════ */
 .confetti-piece{position:fixed;border-radius:2px;animation:confettiFall linear forwards;z-index:999;pointer-events:none;}
@@ -452,15 +490,15 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 
   <h1>Kuromi's Spelling Quest</h1>
   <p class="subtitle" id="homeSubtitle">8 words · 4 spooky-cute games 🖤</p>
-  <div class="task-chip" id="homeTaskChip">📋 T3 Wk5 Task 4 — Spelling List</div>
+  <div class="task-chip" id="homeTaskChip">📋 T3 Wk6 Task 5 — Spelling List</div>
 
   <div class="word-preview">
     <h3>🔑 Today's words</h3>
     <div class="word-pills" id="homePills">
-      <span class="word-pill">close</span><span class="word-pill">read</span>
-      <span class="word-pill">answer</span><span class="word-pill">stool</span>
-      <span class="word-pill">write</span><span class="word-pill">learn</span>
-      <span class="word-pill">teacher</span><span class="word-pill">copy</span>
+      <span class="word-pill">hurry</span><span class="word-pill">clothes</span>
+      <span class="word-pill">mine</span><span class="word-pill">pockets</span>
+      <span class="word-pill">breakfast</span><span class="word-pill">thanked</span>
+      <span class="word-pill">our</span><span class="word-pill">visited</span>
     </div>
   </div>
 
@@ -636,6 +674,11 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     </div>
   </div>
   <div class="game-content">
+    <!-- Mode toggle -->
+    <div class="ws-mode-row">
+      <button class="ws-mode-btn active" id="ws-btn-basic"    onclick="setWsMode('basic')">🔤 Basic ← only</button>
+      <button class="ws-mode-btn"        id="ws-btn-advanced" onclick="setWsMode('advanced')">🔀 Advanced ↔↕↗↘</button>
+    </div>
     <!-- Words to find -->
     <div class="ws-word-list">
       <div class="ws-word-list-label">🔑 Find these words — tap a word for a hint</div>
@@ -686,27 +729,96 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
   </div>
   <div class="admin-content">
 
-    <!-- HOW TO UPDATE -->
-    <div class="admin-instructions">
-      <p>📸 <strong>How to update each week:</strong></p>
-      <p>1. Take a photo of the new spelling worksheet</p>
-      <p>2. Send to Claude and say:</p>
-      <div class="admin-prompt-box" id="claudePrompt">"Give me the spelling game JSON for this word list"</div>
-      <button class="copy-btn" onclick="copyClaudePrompt()">📋 Copy this message to send to Claude</button>
-      <p style="margin-top:10px;">3. Copy the JSON Claude gives you</p>
-      <p>4. Paste it below and tap Save ✅</p>
+    <!-- ── OCR: AUTO-EXTRACT FROM PHOTO ── -->
+    <div class="admin-section">
+      <h3>📸 Auto-Extract from Photo</h3>
+
+      <!-- Step 1: Provider + API Key -->
+      <div class="ocr-step">
+        <div class="ocr-step-title"><span class="ocr-step-num">1</span>Choose AI provider and enter API key</div>
+
+        <!-- Provider toggle -->
+        <div class="ocr-provider-row">
+          <button class="ocr-provider-btn active-gemini" id="ocr-btn-gemini" onclick="setOcrProvider('gemini')">
+            ✨ Gemini<br><span style="font-size:.7rem;font-weight:400;opacity:.8;">Free · No card needed</span>
+          </button>
+          <button class="ocr-provider-btn" id="ocr-btn-claude" onclick="setOcrProvider('claude')">
+            🤖 Claude<br><span style="font-size:.7rem;font-weight:400;opacity:.8;">~$0.01/call</span>
+          </button>
+        </div>
+
+        <!-- Gemini key section -->
+        <div id="ocr-gemini-section">
+          <p class="ocr-note">Get a <strong>free</strong> key at <strong>aistudio.google.com</strong> → Get API Key. No credit card needed. 1,500 free calls/day.</p>
+          <div class="ocr-key-row">
+            <input type="password" id="ocrGeminiKey" class="ocr-key-input" placeholder="AIzaSy…" autocomplete="off" autocorrect="off" autocapitalize="off">
+            <button class="ocr-key-save" onclick="ocrSaveKey('gemini')">Save</button>
+          </div>
+        </div>
+
+        <!-- Claude key section (hidden by default) -->
+        <div id="ocr-claude-section" style="display:none;">
+          <p class="ocr-note">Get a key at <strong>console.anthropic.com</strong> → API Keys. Requires adding credits (~$5 min, lasts months at weekly use).</p>
+          <div class="ocr-key-row">
+            <input type="password" id="ocrClaudeKey" class="ocr-key-input" placeholder="sk-ant-api03-…" autocomplete="off" autocorrect="off" autocapitalize="off">
+            <button class="ocr-key-save" onclick="ocrSaveKey('claude')">Save</button>
+          </div>
+        </div>
+
+        <div id="ocrKeyStatus" class="ocr-key-status"></div>
+      </div>
+
+      <!-- Step 2: Upload Photo -->
+      <div class="ocr-step">
+        <div class="ocr-step-title"><span class="ocr-step-num">2</span>Take or upload a photo of the worksheet</div>
+        <label class="ocr-upload-label" for="ocrFileInput">
+          📷 Choose Photo / Open Camera
+          <input type="file" id="ocrFileInput" accept="image/*" capture="environment" style="display:none;" onchange="ocrPreviewFile(event)">
+        </label>
+        <img id="ocrPreviewImg" alt="Preview">
+      </div>
+
+      <!-- Step 3: Extract -->
+      <div class="ocr-step">
+        <div class="ocr-step-title"><span class="ocr-step-num">3</span>Extract words automatically</div>
+        <button class="btn btn-submit" id="ocrExtractBtn" onclick="ocrExtract()" style="width:100%;">
+          🔍 Extract Words from Photo
+        </button>
+        <div class="ocr-status" id="ocrStatus"></div>
+      </div>
+
+      <!-- Step 4: Review & Edit -->
+      <div id="ocrReviewSection" style="display:none;">
+        <div class="ocr-step">
+          <div class="ocr-step-title"><span class="ocr-step-num">4</span>Review and edit before loading</div>
+          <div class="ocr-field-label" style="margin-bottom:5px;">Task name</div>
+          <input type="text" id="ocrTaskNameInput" class="ocr-field-input" placeholder="e.g. T3 Wk5 Task 4">
+          <div id="ocrReviewRows"></div>
+          <div class="btn-row" style="margin-top:4px;">
+            <button class="btn btn-submit" onclick="ocrLoadIntoGame()">✅ Load into Game</button>
+            <button class="btn btn-clear" onclick="ocrAddRow()">＋ Add Row</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- TASK NAME -->
+    <!-- ── CURRENT LIST ── -->
     <div class="admin-section">
-      <h3>🏷️ Task Name (shown in game)</h3>
+      <h3>📋 Current Word List</h3>
+      <div id="adminCurrentList"></div>
+    </div>
+
+    <!-- ── TASK NAME (for manual JSON method) ── -->
+    <div class="admin-section">
+      <h3>🏷️ Task Name</h3>
       <input class="admin-task-input" id="adminTaskName" type="text" placeholder="e.g. T3 Wk3 Task 1">
     </div>
 
-    <!-- PASTE NEW LIST -->
+    <!-- ── MANUAL JSON (fallback) ── -->
     <div class="admin-section">
-      <h3>📥 Paste New Word List JSON</h3>
-      <textarea class="admin-textarea" id="adminPaste" placeholder='Paste the JSON from Claude here…&#10;&#10;Example format:&#10;[&#10;  {"word":"dark","sentence":"The room is ___ .","hint":"No light 🌑"},&#10;  {"word":"down","sentence":"We walk ___ to the canteen.","hint":"From high to low ⬇️"}&#10;]'></textarea>
+      <h3>📝 Alternative: Paste JSON Manually</h3>
+      <p style="font-size:.82rem;color:var(--text-muted);font-family:var(--body-f);margin-bottom:10px;line-height:1.6;">If OCR isn't available, send your photo to Claude and ask: <em>"Give me the spelling game JSON"</em> then paste the result here.</p>
+      <textarea class="admin-textarea" id="adminPaste" placeholder='[&#10;  {"word":"close","sentence":"Please ___ the window.","hint":"To shut something 🚪"},&#10;  ...&#10;]'></textarea>
       <div id="adminError" class="admin-error"></div>
       <div id="adminSuccess" class="admin-success"></div>
       <div class="btn-row">
@@ -715,7 +827,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       </div>
     </div>
 
-    <!-- PREVIEW -->
+    <!-- PREVIEW (for manual JSON) -->
     <div class="admin-section" id="adminPreviewSection" style="display:none;">
       <h3>👁️ Preview — check before saving</h3>
       <div id="adminPreviewList"></div>
@@ -725,25 +837,12 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       </div>
     </div>
 
-    <!-- CURRENT LIST -->
-    <div class="admin-section">
-      <h3>📋 Current Word List</h3>
-      <div id="adminCurrentList"></div>
-    </div>
-
-    <!-- DOWNLOAD FOR GITHUB -->
+    <!-- ── DOWNLOAD FOR GITHUB ── -->
     <div class="admin-section">
       <h3>📥 Share with Everyone (GitHub)</h3>
-      <p style="font-size:.84rem;color:var(--text-sub);font-family:var(--body-f);margin-bottom:6px;line-height:1.65;">
-        After saving your word list above, tap below to download the updated file.
-        Then upload it to GitHub — everyone with your link gets the new words instantly.
-      </p>
-      <p style="font-size:.78rem;color:var(--text-muted);font-family:var(--body-f);margin-bottom:12px;line-height:1.6;">
-        Steps: Download → rename to <strong>index.html</strong> → GitHub → tap file → ✏️ → upload → Commit
-      </p>
-      <button class="btn btn-next" id="downloadBtn" onclick="downloadUpdatedFile()" style="width:100%;padding:14px;">
-        📥 Download Updated index.html
-      </button>
+      <p style="font-size:.84rem;color:var(--text-sub);font-family:var(--body-f);margin-bottom:6px;line-height:1.65;">After updating your word list, download the file and upload it to GitHub — everyone with your link gets the new words.</p>
+      <p style="font-size:.78rem;color:var(--text-muted);font-family:var(--body-f);margin-bottom:12px;line-height:1.6;">Steps: Download → rename to <strong>index.html</strong> → GitHub → tap file → ✏️ → upload → Commit</p>
+      <button class="btn btn-next" id="downloadBtn" onclick="downloadUpdatedFile()" style="width:100%;padding:14px;">📥 Download Updated index.html</button>
       <div id="downloadMsg" style="margin-top:10px;font-size:.84rem;font-family:var(--body-f);color:var(--correct-col);display:none;"></div>
     </div>
 
@@ -755,19 +854,19 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 // DEFAULT WORD LIST (loaded if nothing saved)
 // ════════════════════════════════════════════
 const DEFAULT_WORDS = [
-  {word:"close",   sentence:"Please ___ the window.",                               hint:"To shut something so it is no longer open 🚪"},
-  {word:"read",    sentence:"I ___ a book every day.",                              hint:"To look at words and understand them 📖"},
-  {word:"answer",  sentence:"Can you ___ the call?",                               hint:"To respond to a question or pick up the phone 📞"},
-  {word:"stool",   sentence:"I sat on a ___ to rest my feet.",                     hint:"A seat with no back, like a small chair 🪑"},
-  {word:"write",   sentence:"We ___ a letter to our friend.",                      hint:"To make words on paper with a pen or pencil ✏️"},
-  {word:"learn",   sentence:"She wants to ___ how to dance.",                      hint:"To gain new knowledge or a new skill 🎓"},
-  {word:"teacher", sentence:"My ___ is telling us how to play the game.",          hint:"A person whose job is to help children learn at school 👩‍🏫"},
-  {word:"copy",    sentence:"We ___ the words neatly from the whiteboard.",        hint:"To write or draw something exactly the same as another 📋"}
+  {word:"hurry",     sentence:"Johnny ran off in a ___.",                                     hint:"To move or do something very quickly ⚡"},
+  {word:"clothes",   sentence:"I dirtied my ___ again.",                                      hint:"Things you wear on your body like shirts and pants 👕"},
+  {word:"mine",      sentence:"The book on the table is ___.",                                hint:"Belonging to me — the opposite of yours 🙋"},
+  {word:"pockets",   sentence:"There is nothing in my ___.",                                  hint:"Small pouches sewn into clothing to hold things 👖"},
+  {word:"breakfast", sentence:"What did you have for ___ today?",                            hint:"The first meal of the day eaten in the morning 🍳"},
+  {word:"thanked",   sentence:"Siti ___ her aunty for giving her green packets.",            hint:"She said thank you and showed she was grateful 🙏"},
+  {word:"our",       sentence:"My family decorated ___ house to celebrate Hari Raya.",       hint:"Belonging to us — me and my family 🏠"},
+  {word:"visited",   sentence:"We ___ our grandparents on the first day of Hari Raya.",     hint:"We went to see someone at their home 👴👵"}
 ];
 
 // QUESTIONS is mutable — overwritten by loadWordList() on startup
 let QUESTIONS = [];
-let currentTaskName = 'T3 Wk5 Task 4';
+let currentTaskName = 'T3 Wk6 Task 5';
 
 // ════════════════════════════════════════════
 // BUILD HINTS from stored item
@@ -867,10 +966,19 @@ function openAdmin(){
     </div>`
   ).join('');
   document.getElementById('adminTaskName').value = currentTaskName;
+  document.getElementById('ocrTaskNameInput').value = currentTaskName;
   document.getElementById('adminPaste').value='';
   document.getElementById('adminPreviewSection').style.display='none';
-  hideAdminMsg();
-  // Show as fixed overlay — does NOT disturb the game screen system
+  document.getElementById('ocrReviewSection').style.display='none';
+  hideAdminMsg(); ocrHideStatus();
+  // Restore saved API keys
+  const savedGemini = localStorage.getItem('gemini_api_key');
+  const savedClaude = localStorage.getItem('anthropic_api_key');
+  if(savedGemini) document.getElementById('ocrGeminiKey').value = savedGemini;
+  if(savedClaude) document.getElementById('ocrClaudeKey').value = savedClaude;
+  // Restore provider selection and show status
+  setOcrProvider(ocrProvider);
+  // Show as fixed overlay
   const panel = document.getElementById('adminPanel');
   panel.style.display = 'block';
   panel.scrollTop = 0;
@@ -1462,15 +1570,26 @@ async function downloadUpdatedFile(){
 
 // ════════════════════════════════════════════
 // GAME 4 — WORD SEARCH
-// Random puzzle every time: shuffled word order,
-// randomised direction & position per word → huge variety
+// Basic mode  : words placed left→right only (default, easier for young learners)
+// Advanced mode: all 8 directions (harder, more variety)
 // ════════════════════════════════════════════
-const WS_COLORS = ['#86efac','#6EC6F5','#fbbf24','#f9a8d4','#c4b5fd','#fca5a5','#a7f3d0','#fde68a'];
-const WS_DIRS   = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]; // 8 directions
-let WS_SIZE = 12;
+const WS_COLORS   = ['#86efac','#6EC6F5','#fbbf24','#f9a8d4','#c4b5fd','#fca5a5','#a7f3d0','#fde68a'];
+const WS_DIRS_ALL = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+const WS_DIR_LR   = [[0,1]]; // left-to-right only
+
+let wsMode = 'basic';  // 'basic' | 'advanced'
+let WS_ROWS=10, WS_COLS=14;
 let wsGrid=[], wsWordPlacements=[], wsFoundWords=new Set();
 let wsStartCell=null, wsCurrentCell=null, wsSelCells=[], wsCellEls=[];
 let wsMouseHeld=false, wsEventsSet=false;
+
+/* ── Mode toggle ── */
+function setWsMode(mode){
+  wsMode=mode;
+  document.getElementById('ws-btn-basic').classList.toggle('active', mode==='basic');
+  document.getElementById('ws-btn-advanced').classList.toggle('active', mode==='advanced');
+  wsNewPuzzle();
+}
 
 /* ── Entry point ── */
 function startGame4(){
@@ -1490,26 +1609,39 @@ function wsNewPuzzle(){
 
 /* ── Puzzle generation ── */
 function wsGenerate(){
-  // Grid size = max(12, longest_word + 5) — fits all words comfortably
-  WS_SIZE = Math.max(12, Math.max(...QUESTIONS.map(q=>q.word.length)) + 5);
-  wsGrid = Array.from({length:WS_SIZE},()=>Array(WS_SIZE).fill(''));
+  const maxLen = Math.max(...QUESTIONS.map(q=>q.word.length));
+  const n = QUESTIONS.length;
+
+  if(wsMode==='basic'){
+    // All words go left→right; grid is wide enough for longest word + padding
+    // Enough rows to place all words without overlap
+    WS_COLS = Math.max(14, maxLen + 4);
+    WS_ROWS = Math.max(n + 3, 10);
+  } else {
+    // Square grid; all 8 directions
+    const side = Math.max(12, maxLen + 5);
+    WS_ROWS = WS_COLS = side;
+  }
+
+  wsGrid = Array.from({length:WS_ROWS},()=>Array(WS_COLS).fill(''));
   wsWordPlacements = [];
-  // Shuffle word order → different spatial layout each run
+
+  const activeDirs = wsMode==='basic' ? WS_DIR_LR : WS_DIRS_ALL;
   const words = shuffle(QUESTIONS.map(q=>q.word.toUpperCase()));
-  for(const w of words) wsPlaceWord(w);
+  for(const w of words) wsPlaceWord(w, activeDirs);
+
   // Fill blanks with random letters
   const ABC='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  for(let r=0;r<WS_SIZE;r++) for(let c=0;c<WS_SIZE;c++)
+  for(let r=0;r<WS_ROWS;r++) for(let c=0;c<WS_COLS;c++)
     if(!wsGrid[r][c]) wsGrid[r][c]=ABC[Math.floor(Math.random()*26)];
 }
 
-function wsPlaceWord(word){
-  const dirs=shuffle(WS_DIRS); // try directions in random order
-  for(const [dr,dc] of dirs){
-    const minR=dr<0?word.length-1:0, maxR=dr>0?WS_SIZE-word.length:WS_SIZE-1;
-    const minC=dc<0?word.length-1:0, maxC=dc>0?WS_SIZE-word.length:WS_SIZE-1;
+function wsPlaceWord(word, dirs){
+  const shuffledDirs = shuffle(dirs);
+  for(const [dr,dc] of shuffledDirs){
+    const minR=dr<0?word.length-1:0, maxR=dr>0?WS_ROWS-word.length:WS_ROWS-1;
+    const minC=dc<0?word.length-1:0, maxC=dc>0?WS_COLS-word.length:WS_COLS-1;
     if(minR>maxR||minC>maxC) continue;
-    // Build all candidate start positions and shuffle for randomness
     const pos=[];
     for(let r=minR;r<=maxR;r++) for(let c=minC;c<=maxC;c++) pos.push([r,c]);
     for(const [r,c] of shuffle(pos)){
@@ -1544,16 +1676,16 @@ function wsRender(){
     </span>`;
   }).join('');
 
-  // Grid
+  // Grid — columns × rows may differ now
   const gridEl=document.getElementById('ws-grid');
-  gridEl.style.gridTemplateColumns=`repeat(${WS_SIZE},1fr)`;
+  gridEl.style.gridTemplateColumns=`repeat(${WS_COLS},1fr)`;
   gridEl.innerHTML='';
   wsCellEls=[];
-  // Font size scales with grid — keep readable on mobile
-  const fs=`clamp(9px,${(100/WS_SIZE*.55).toFixed(1)}vw,13px)`;
-  for(let r=0;r<WS_SIZE;r++){
+  // Font size: scale with number of columns (wider grid = smaller font)
+  const fs=`clamp(8px,${(100/WS_COLS*.52).toFixed(1)}vw,13px)`;
+  for(let r=0;r<WS_ROWS;r++){
     const row=[];
-    for(let c=0;c<WS_SIZE;c++){
+    for(let c=0;c<WS_COLS;c++){
       const el=document.createElement('div');
       el.className='ws-cell';
       el.textContent=wsGrid[r][c];
@@ -1565,7 +1697,7 @@ function wsRender(){
     wsCellEls.push(row);
   }
 
-  // Re-colour already found words (when calling wsNewPuzzle mid-game)
+  // Re-colour already found words
   for(const pl of wsWordPlacements){
     if(!wsFoundWords.has(pl.word)) continue;
     const idx=QUESTIONS.findIndex(q=>q.word.toUpperCase()===pl.word);
@@ -1577,18 +1709,16 @@ function wsRender(){
   }
 }
 
-/* ── Event setup (once per session, event-delegation on wrap) ── */
+/* ── Event setup (once per session) ── */
 function wsSetupEvents(){
   if(wsEventsSet) return;
   wsEventsSet=true;
   const wrap=document.getElementById('ws-grid-wrap');
 
-  // Touch
   wrap.addEventListener('touchstart', e=>{
     e.preventDefault();
     wsStartCell=wsCellAt(e.touches[0].clientX,e.touches[0].clientY);
-    wsCurrentCell=wsStartCell;
-    wsHighlight();
+    wsCurrentCell=wsStartCell; wsHighlight();
   },{passive:false});
   wrap.addEventListener('touchmove', e=>{
     e.preventDefault();
@@ -1596,17 +1726,14 @@ function wsSetupEvents(){
     if(cell&&cell!==wsCurrentCell){wsCurrentCell=cell;wsHighlight();}
   },{passive:false});
   wrap.addEventListener('touchend', e=>{
-    e.preventDefault();
-    wsCheck();
+    e.preventDefault(); wsCheck();
     wsStartCell=null; wsCurrentCell=null; wsHighlight();
   },{passive:false});
 
-  // Mouse (desktop)
   wrap.addEventListener('mousedown', e=>{
     wsMouseHeld=true;
     wsStartCell=e.target.closest('.ws-cell');
-    wsCurrentCell=wsStartCell;
-    wsHighlight();
+    wsCurrentCell=wsStartCell; wsHighlight();
   });
   document.addEventListener('mousemove', e=>{
     if(!wsMouseHeld) return;
@@ -1631,7 +1758,6 @@ function wsLineCells(a,b){
   if(!b||a===b) return [a];
   const r1=+a.dataset.r,c1=+a.dataset.c,r2=+b.dataset.r,c2=+b.dataset.c;
   const dr=r2-r1,dc=c2-c1;
-  // Only straight lines (h, v, diagonal)
   if(dr!==0&&dc!==0&&Math.abs(dr)!==Math.abs(dc)) return [a];
   const steps=Math.max(Math.abs(dr),Math.abs(dc));
   const sdr=dr===0?0:dr/Math.abs(dr), sdc=dc===0?0:dc/Math.abs(dc);
@@ -1644,13 +1770,12 @@ function wsLineCells(a,b){
 }
 
 function wsHighlight(){
-  // Clear previous selection highlight (not found)
   wsSelCells.forEach(el=>{if(!el.classList.contains('found'))el.classList.remove('selected');});
   wsSelCells=wsLineCells(wsStartCell,wsCurrentCell);
   wsSelCells.forEach(el=>{if(!el.classList.contains('found'))el.classList.add('selected');});
 }
 
-/* ── Check selection against word list ── */
+/* ── Check selection ── */
 function wsCheck(){
   if(wsSelCells.length<2) return;
   const fwd=wsSelCells.map(el=>el.textContent).join('');
@@ -1661,7 +1786,6 @@ function wsCheck(){
   });
   if(!match) return;
 
-  // Mark found
   const uw=match.word.toUpperCase();
   const idx=QUESTIONS.findIndex(q=>q.word===match.word);
   const col=WS_COLORS[idx%WS_COLORS.length];
@@ -1671,15 +1795,12 @@ function wsCheck(){
   });
   wsFoundWords.add(uw);
 
-  // Update chip
   const chip=document.getElementById(`ws-chip-${idx}`);
   if(chip){chip.classList.add('found');chip.style.cssText=`background:${col};color:#1a1a2e;border-color:${col};`; chip.textContent=match.word+' ✓';}
 
-  // Update counter
   const total=QUESTIONS.length;
   document.getElementById('g4-found').textContent=`${wsFoundWords.size} / ${total} found`;
   document.getElementById('g4-bar').style.width=(wsFoundWords.size/total*100)+'%';
-
   launchConfetti(12);
 
   if(wsFoundWords.size>=total){
@@ -1690,7 +1811,7 @@ function wsCheck(){
   }
 }
 
-/* ── Hint: tap a word chip → flash its first letter ── */
+/* ── Hint: flash first letter ── */
 function wsHint(idx){
   const uw=QUESTIONS[idx]?.word?.toUpperCase();
   if(!uw||wsFoundWords.has(uw)) return;
@@ -1700,8 +1821,7 @@ function wsHint(idx){
   if(!el) return;
   el.style.transition='all .15s';
   el.style.background=WS_COLORS[idx%WS_COLORS.length];
-  el.style.color='#1a1a2e';
-  el.style.transform='scale(1.25)';
+  el.style.color='#1a1a2e'; el.style.transform='scale(1.25)';
   setTimeout(()=>{
     el.style.background=''; el.style.color=''; el.style.transform='';
     setTimeout(()=>{ el.style.transition=''; },200);
@@ -1709,42 +1829,149 @@ function wsHint(idx){
 }
 
 // ════════════════════════════════════════════
-// INIT
+// OCR — Auto-extract words from photo
+// Supports: Google Gemini (free) or Anthropic Claude
 // ════════════════════════════════════════════
-window.addEventListener('resize',()=>{
-  if(currentGame===1){ const c=document.getElementById('g1Canvas'); if(c){c.width=Math.min(560,window.innerWidth-36);drawLines(c);} }
-});
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&currentGame===1&&g1Mode==='type') submitG1Type();
-});
-// iOS: resume speech when tab returns to foreground
-document.addEventListener('visibilitychange',()=>{
-  if(document.visibilityState==='visible'&&window.speechSynthesis) window.speechSynthesis.resume();
-});
-// Preload voices (needed on some iOS versions)
-if(window.speechSynthesis){
-  window.speechSynthesis.getVoices();
-  if(window.speechSynthesis.onvoiceschanged!==undefined){
-    window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
-  }
+let ocrImageB64 = null;
+let ocrRowCounter = 0;
+let ocrProvider = 'gemini'; // 'gemini' | 'claude'
+
+/* ── Provider toggle ── */
+function setOcrProvider(p){
+  ocrProvider = p;
+  document.getElementById('ocr-btn-gemini').className = 'ocr-provider-btn' + (p==='gemini' ? ' active-gemini' : '');
+  document.getElementById('ocr-btn-claude').className = 'ocr-provider-btn' + (p==='claude' ? ' active-claude' : '');
+  document.getElementById('ocr-gemini-section').style.display = p==='gemini' ? 'block' : 'none';
+  document.getElementById('ocr-claude-section').style.display = p==='claude' ? 'block' : 'none';
+  // Show saved status for the chosen provider
+  const ks = document.getElementById('ocrKeyStatus');
+  const saved = localStorage.getItem(p==='gemini' ? 'gemini_api_key' : 'anthropic_api_key');
+  if(saved){ ks.textContent=`✅ ${p==='gemini'?'Gemini':'Claude'} key loaded`; ks.style.color='var(--correct-col)'; }
+  else { ks.textContent=''; }
 }
-// ── Kuromi tap unlock — pointerdown is the most reliable event on
-//    Android Chrome, Samsung Browser, iOS Safari, and desktop.
-//    Unlike touchstart+click, pointerdown fires exactly once per tap.
-(function(){
-  const area = document.getElementById('kuromTapArea');
-  if(!area) return;
-  let lastEvt = 0;
-  area.addEventListener('pointerdown', function(e){
-    e.preventDefault();
-    const now = Date.now();
-    if(now - lastEvt < 200) return; // debounce: ignore within 200ms
-    lastEvt = now;
-    kuromTap();
+
+/* ── Save API key ── */
+function ocrSaveKey(p){
+  const inputId = p==='gemini' ? 'ocrGeminiKey' : 'ocrClaudeKey';
+  const storeKey = p==='gemini' ? 'gemini_api_key' : 'anthropic_api_key';
+  const key = document.getElementById(inputId).value.trim();
+  const ks  = document.getElementById('ocrKeyStatus');
+  if(!key){ ks.textContent='Please enter a key first.'; ks.style.color='var(--wrong-col)'; return; }
+  localStorage.setItem(storeKey, key);
+  ks.textContent=`✅ ${p==='gemini'?'Gemini':'Claude'} key saved on this device.`;
+  ks.style.color='var(--correct-col)';
+}
+
+/* ── Image preview & resize ── */
+function ocrPreviewFile(e){
+  const file = e.target.files[0]; if(!file) return;
+  const img = document.getElementById('ocrPreviewImg');
+  img.src = URL.createObjectURL(file);
+  img.style.display = 'block';
+  ocrImageB64 = null;
+  ocrResizeImg(file, 1400).then(b64=>{ ocrImageB64=b64; });
+}
+
+function ocrResizeImg(file, maxDim){
+  return new Promise(resolve=>{
+    const img=new Image(), url=URL.createObjectURL(file);
+    img.onload=()=>{
+      let w=img.naturalWidth, h=img.naturalHeight;
+      if(w>maxDim||h>maxDim){ const r=Math.min(maxDim/w,maxDim/h); w=Math.round(w*r); h=Math.round(h*r); }
+      const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      resolve(cv.toDataURL('image/jpeg',0.85).split(',')[1]);
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); resolve(null); };
+    img.src=url;
   });
-})();
-// Load saved word list on startup
-loadWordList();
-</script>
-</body>
-</html>
+}
+
+/* ── Status helpers ── */
+function ocrShowStatus(msg, type){
+  const el=document.getElementById('ocrStatus');
+  el.textContent=msg; el.className=`ocr-status ${type}`; el.style.display='block';
+}
+function ocrHideStatus(){
+  const el=document.getElementById('ocrStatus');
+  if(el){ el.style.display='none'; el.textContent=''; }
+}
+
+/* ── Main extraction — routes to Gemini or Claude ── */
+async function ocrExtract(){
+  const isGemini = ocrProvider === 'gemini';
+  const storeKey = isGemini ? 'gemini_api_key' : 'anthropic_api_key';
+  const inputId  = isGemini ? 'ocrGeminiKey' : 'ocrClaudeKey';
+  const apiKey   = localStorage.getItem(storeKey) || document.getElementById(inputId).value.trim();
+
+  if(!apiKey){
+    ocrShowStatus(`❌ Please enter and save your ${isGemini?'Gemini':'Claude'} API key (Step 1).`,'error'); return;
+  }
+  if(!ocrImageB64){
+    ocrShowStatus('❌ Please upload a photo first (Step 2).','error'); return;
+  }
+  const btn = document.getElementById('ocrExtractBtn');
+  btn.textContent='⏳ Reading photo…'; btn.disabled=true;
+  ocrShowStatus(`🔍 Sending to ${isGemini?'Google Gemini':'Claude AI'} — please wait…`,'info');
+
+  const PROMPT = `Extract the spelling word list from this worksheet image.
+Look for words that are underlined or in bold in the sentences.
+
+Return ONLY a valid JSON object — no markdown, no explanation, nothing else:
+{
+  "taskName": "T3 Wk6 Task 5",
+  "words": [
+    {"word":"example","sentence":"The ___ fits here.","hint":"Short child-friendly clue with emoji"},
+    ...
+  ]
+}
+
+Rules:
+- Replace each spelling word in its sentence with ___
+- "word" must be lowercase
+- Write a simple friendly hint for a 7-year-old child
+- Extract the task name from the header if visible
+- Include every word in the list`;
+
+  try{
+    let raw = '';
+
+    if(isGemini){
+      // ── Google Gemini ──
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+        {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            contents:[{parts:[
+              {inline_data:{mime_type:'image/jpeg', data:ocrImageB64}},
+              {text: PROMPT}
+            ]}],
+            generationConfig:{temperature:0.1, maxOutputTokens:1500}
+          })
+        }
+      );
+      if(!res.ok){
+        const err=await res.json().catch(()=>({}));
+        throw new Error(err.error?.message || `Gemini error ${res.status} — check your API key`);
+      }
+      const data = await res.json();
+      raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    } else {
+      // ── Anthropic Claude ──
+      const res = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body: JSON.stringify({
+          model:'claude-sonnet-4-6',
+          max_tokens:1500,
+          messages:[{role:'user', content:[
+            {type:'image', source:{type:'base64',media_type:
