@@ -1197,12 +1197,16 @@ function sentLabel(){
 // START GAME
 // ════════════════════════════════════════════
 function startGame(num){
-  currentGame=num; currentRetry=num; currentIdx=0;
-  scores[num-1]=0; hintCounts={}; hintTexts={};
-  gameOrder=shuffle([...Array(QUESTIONS.length).keys()]);
-  if(num===1){ initCanvas(); renderG1(); showScreen('game1'); }
-  else if(num===2){ renderG2(); showScreen('game2'); }
-  else { renderG3(); showScreen('game3'); }
+  try{
+    currentGame=num; currentRetry=num; currentIdx=0;
+    scores[num-1]=0; hintCounts={}; hintTexts={};
+    gameOrder=shuffle([...Array(QUESTIONS.length).keys()]);
+    if(num===1){ initCanvas(); renderG1(); showScreen('game1'); }
+    else if(num===2){ renderG2(); showScreen('game2'); }
+    else { renderG3(); showScreen('game3'); }
+  }catch(err){
+    console.error('startGame error:', err);
+  }
 }
 
 // ════════════════════════════════════════════
@@ -1585,9 +1589,11 @@ let wsMouseHeld=false, wsEventsSet=false;
 
 /* ── Mode toggle ── */
 function setWsMode(mode){
-  wsMode=mode;
-  document.getElementById('ws-btn-basic').classList.toggle('active', mode==='basic');
-  document.getElementById('ws-btn-advanced').classList.toggle('active', mode==='advanced');
+  wsMode = mode;
+  const btnBasic = document.getElementById('ws-btn-basic');
+  const btnAdv   = document.getElementById('ws-btn-advanced');
+  if(btnBasic){ btnBasic.classList.remove('active');    if(mode==='basic')    btnBasic.classList.add('active'); }
+  if(btnAdv)  { btnAdv.classList.remove('active');      if(mode==='advanced') btnAdv.classList.add('active'); }
   wsNewPuzzle();
 }
 
@@ -1968,10 +1974,4 @@ Rules:
           'Content-Type':'application/json',
           'x-api-key': apiKey,
           'anthropic-version':'2023-06-01',
-          'anthropic-dangerous-direct-browser-access':'true'
-        },
-        body: JSON.stringify({
-          model:'claude-sonnet-4-6',
-          max_tokens:1500,
-          messages:[{role:'user', content:[
-            {type:'image', source:{type:'base64',media_type:
+          'anthr
