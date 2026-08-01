@@ -7,6 +7,19 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Kuromi's Spelling Quest 🖤</title>
+<!-- Google Fonts loaded NON-BLOCKING via link (not @import inside style).
+     @import inside <style> is CSS-blocking on HTTPS: Chrome waits for it
+     before executing any <script>, making clicks appear broken until
+     the font resolves. Using media="print" + onload is the standard
+     async font-loading pattern that avoids this entirely. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap"
+      media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap">
+</noscript>
 <style>
 @font-face {
   font-family: 'OpenDyslexic';
@@ -18,7 +31,8 @@
   src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/OpenDyslexic-Bold.otf') format('opentype');
   font-weight: 700; font-display: swap;
 }
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+/* NOTE: @import removed from here — it was after @font-face (invalid CSS)
+   and was blocking script execution on HTTPS. Font now loaded via <link> above. */
 
 :root {
   --body-f: 'OpenDyslexic','Comic Sans MS',sans-serif;
@@ -1950,28 +1964,4 @@ Rules:
         {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({
-            contents:[{parts:[
-              {inline_data:{mime_type:'image/jpeg', data:ocrImageB64}},
-              {text: PROMPT}
-            ]}],
-            generationConfig:{temperature:0.1, maxOutputTokens:1500}
-          })
-        }
-      );
-      if(!res.ok){
-        const err=await res.json().catch(()=>({}));
-        throw new Error(err.error?.message || `Gemini error ${res.status} — check your API key`);
-      }
-      const data = await res.json();
-      raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-    } else {
-      // ── Anthropic Claude ──
-      const res = await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version':'2023-06-01',
-          'anthr
+          body: JSON.stringify(
