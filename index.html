@@ -443,7 +443,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()" id="themeToggleBtn" title="Switch theme">☀️</button>
+<button class="theme-toggle" data-fn="toggleTheme" id="themeToggleBtn" title="Switch theme">☀️</button>
 <div class="bg-deco" id="bgDeco"></div>
 
 <!-- ══════════ HOME ══════════ -->
@@ -517,17 +517,17 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
   </div>
 
   <div class="game-cards">
-    <div class="game-card" onclick="startGame(1)"><div class="icon">✏️</div><div><h2>Fill in the Blank</h2><p>Write the missing word in the sentence</p></div></div>
-    <div class="game-card" onclick="startGame(2)"><div class="icon">🃏</div><div><h2>Word Rescue</h2><p>Pick the right word for the sentence</p></div></div>
-    <div class="game-card" onclick="startGame(3)"><div class="icon">🔤</div><div><h2>Letter Detective</h2><p>Tap letters to spell the missing word</p></div></div>
-    <div class="game-card" onclick="startGame4()"><div class="icon">🔍</div><div><h2>Word Search</h2><p>Find all the spelling words in the grid</p></div></div>
+    <div class="game-card" data-fn="startGame" data-arg="1"><div class="icon">✏️</div><div><h2>Fill in the Blank</h2><p>Write the missing word in the sentence</p></div></div>
+    <div class="game-card" data-fn="startGame" data-arg="2"><div class="icon">🃏</div><div><h2>Word Rescue</h2><p>Pick the right word for the sentence</p></div></div>
+    <div class="game-card" data-fn="startGame" data-arg="3"><div class="icon">🔤</div><div><h2>Letter Detective</h2><p>Tap letters to spell the missing word</p></div></div>
+    <div class="game-card" data-fn="startGame4"><div class="icon">🔍</div><div><h2>Word Search</h2><p>Find all the spelling words in the grid</p></div></div>
   </div>
 </div>
 
 <!-- ══════════ GAME 1 ══════════ -->
 <div id="game1" class="screen">
   <div class="game-header">
-    <button class="back-btn" onclick="goHome()">←</button>
+    <button class="back-btn" data-fn="goHome">←</button>
     <div class="game-title">✏️ Fill in the Blank</div>
     <div class="progress-wrap">
       <div class="progress-pill" id="g1-progress">1 / 8</div>
@@ -538,49 +538,49 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     <div class="score-row">
       <div class="score-badge">🖤 Score: <span id="g1-score">0</span></div>
       <div class="mode-toggle">
-        <button class="mode-btn active" id="g1-mode-draw" onclick="setG1Mode('draw')">✏️ Draw</button>
-        <button class="mode-btn" id="g1-mode-type" onclick="setG1Mode('type')">⌨️ Type</button>
+        <button class="mode-btn active" id="g1-mode-draw" data-fn="setG1Mode" data-arg="draw">✏️ Draw</button>
+        <button class="mode-btn" id="g1-mode-type" data-fn="setG1Mode" data-arg="type">⌨️ Type</button>
       </div>
     </div>
     <div class="sentence-card">
       <div class="sent-label-row">
         <div class="sent-label" id="g1-task-label"></div>
-        <button class="sound-btn" id="g1-sound-btn" onclick="speakText('sentence',1)">🔊</button>
+        <button class="sound-btn" id="g1-sound-btn" data-fn="speakSentence" data-arg="1">🔊</button>
       </div>
       <span id="g1-sentence-text"></span>
     </div>
     <div class="hint-panel" id="g1-hint-panel">
       <div class="hint-header">
         <span class="hint-title">💡 Hints from Kuromi</span>
-        <button class="hint-speak-btn" id="g1-hint-speak" onclick="speakText('hint',1)">🔊</button>
+        <button class="hint-speak-btn" id="g1-hint-speak" data-fn="speakHint" data-arg="1">🔊</button>
       </div>
       <div class="hint-steps" id="g1-hint-steps"></div>
-      <div class="hint-btn-row"><button class="hint-trigger" id="g1-hint-btn" onclick="showNextHint(1)">💡 Show next hint</button></div>
+      <div class="hint-btn-row"><button class="hint-trigger" id="g1-hint-btn" data-fn="showNextHint" data-arg="1">💡 Show next hint</button></div>
     </div>
     <div id="g1-draw-area">
       <div class="canvas-wrapper">
-        <div class="canvas-label"><span>✍️ Write your answer here</span><button class="btn btn-clear" style="padding:4px 10px;font-size:.76rem;border-radius:8px;min-width:unset;flex:none;" onclick="clearCanvas()">Clear</button></div>
+        <div class="canvas-label"><span>✍️ Write your answer here</span><button class="btn btn-clear" style="padding:4px 10px;font-size:.76rem;border-radius:8px;min-width:unset;flex:none;" data-fn="clearCanvas">Clear</button></div>
         <canvas id="g1Canvas" height="130"></canvas>
       </div>
       <div class="btn-row" style="margin-bottom:10px;">
-        <button class="btn btn-submit" onclick="submitG1()">Submit ✓</button>
-        <button class="btn btn-skip" onclick="skipQuestion(1)">Skip →</button>
+        <button class="btn btn-submit" data-fn="submitG1">Submit ✓</button>
+        <button class="btn btn-skip" data-fn="skipQuestion" data-arg="1">Skip →</button>
       </div>
-      <button class="hint-open-btn" onclick="toggleHintPanel(1)">💡 Need a hint?</button>
+      <button class="hint-open-btn" data-fn="toggleHintPanel" data-arg="1">💡 Need a hint?</button>
     </div>
     <div id="g1-type-area" style="display:none;">
       <div class="typing-area"><input class="text-input" id="g1-type-input" type="text" placeholder="Type your answer…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
       <div class="btn-row" style="margin-bottom:10px;">
-        <button class="btn btn-submit" onclick="submitG1Type()">Submit ✓</button>
-        <button class="btn btn-skip" onclick="skipQuestion(1)">Skip →</button>
+        <button class="btn btn-submit" data-fn="submitG1Type">Submit ✓</button>
+        <button class="btn btn-skip" data-fn="skipQuestion" data-arg="1">Skip →</button>
       </div>
-      <button class="hint-open-btn" onclick="toggleHintPanel(1)">💡 Need a hint?</button>
+      <button class="hint-open-btn" data-fn="toggleHintPanel" data-arg="1">💡 Need a hint?</button>
     </div>
     <div class="answer-box" id="g1-answer">
       <div class="verdict" id="g1-verdict"></div>
       <div class="the-word" id="g1-correct-text"></div>
       <div class="full-sent" id="g1-full-sent"></div>
-      <button class="btn btn-next" style="margin-top:13px;width:100%;" onclick="nextQuestion(1)">Next ➜</button>
+      <button class="btn btn-next" style="margin-top:13px;width:100%;" data-fn="nextQuestion" data-arg="1">Next ➜</button>
     </div>
   </div>
 </div>
@@ -588,7 +588,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 <!-- ══════════ GAME 2 ══════════ -->
 <div id="game2" class="screen">
   <div class="game-header">
-    <button class="back-btn" onclick="goHome()">←</button>
+    <button class="back-btn" data-fn="goHome">←</button>
     <div class="game-title">🃏 Word Rescue</div>
     <div class="progress-wrap">
       <div class="progress-pill" id="g2-progress">1 / 8</div>
@@ -603,26 +603,26 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     <div class="sentence-card">
       <div class="sent-label-row">
         <div class="sent-label" id="g2-task-label"></div>
-        <button class="sound-btn" id="g2-sound-btn" onclick="speakText('sentence',2)">🔊</button>
+        <button class="sound-btn" id="g2-sound-btn" data-fn="speakSentence" data-arg="2">🔊</button>
       </div>
       <span id="g2-sentence-text"></span>
     </div>
     <div class="hint-panel" id="g2-hint-panel">
       <div class="hint-header">
         <span class="hint-title">💡 Hints from Kuromi</span>
-        <button class="hint-speak-btn" id="g2-hint-speak" onclick="speakText('hint',2)">🔊</button>
+        <button class="hint-speak-btn" id="g2-hint-speak" data-fn="speakHint" data-arg="2">🔊</button>
       </div>
       <div class="hint-steps" id="g2-hint-steps"></div>
-      <div class="hint-btn-row"><button class="hint-trigger" id="g2-hint-btn" onclick="showNextHint(2)">💡 Show next hint</button></div>
+      <div class="hint-btn-row"><button class="hint-trigger" id="g2-hint-btn" data-fn="showNextHint" data-arg="2">💡 Show next hint</button></div>
     </div>
     <div class="word-bank"><h3>🗝️ Word Bank — tap your answer</h3><div class="word-chips" id="g2-chips"></div></div>
-    <button class="hint-open-btn" onclick="toggleHintPanel(2)">💡 Need a hint?</button>
-    <button class="btn btn-skip" style="width:100%;margin-top:2px;" onclick="skipQuestion(2)">Skip →</button>
+    <button class="hint-open-btn" data-fn="toggleHintPanel" data-arg="2">💡 Need a hint?</button>
+    <button class="btn btn-skip" style="width:100%;margin-top:2px;" data-fn="skipQuestion" data-arg="2">Skip →</button>
     <div class="answer-box" id="g2-answer">
       <div class="verdict" id="g2-verdict"></div>
       <div class="the-word" id="g2-correct-text"></div>
       <div class="full-sent" id="g2-full-sent"></div>
-      <button class="btn btn-next" style="margin-top:13px;width:100%;" onclick="nextQuestion(2)">Next ➜</button>
+      <button class="btn btn-next" style="margin-top:13px;width:100%;" data-fn="nextQuestion" data-arg="2">Next ➜</button>
     </div>
   </div>
 </div>
@@ -630,7 +630,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 <!-- ══════════ GAME 3 ══════════ -->
 <div id="game3" class="screen">
   <div class="game-header">
-    <button class="back-btn" onclick="goHome()">←</button>
+    <button class="back-btn" data-fn="goHome">←</button>
     <div class="game-title">🔤 Letter Detective</div>
     <div class="progress-wrap">
       <div class="progress-pill" id="g3-progress">1 / 8</div>
@@ -645,17 +645,17 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     <div class="sentence-card">
       <div class="sent-label-row">
         <div class="sent-label" id="g3-task-label"></div>
-        <button class="sound-btn" id="g3-sound-btn" onclick="speakText('sentence',3)">🔊</button>
+        <button class="sound-btn" id="g3-sound-btn" data-fn="speakSentence" data-arg="3">🔊</button>
       </div>
       <span id="g3-sentence-text"></span>
     </div>
     <div class="hint-panel" id="g3-hint-panel">
       <div class="hint-header">
         <span class="hint-title">💡 Hints from Kuromi</span>
-        <button class="hint-speak-btn" id="g3-hint-speak" onclick="speakText('hint',3)">🔊</button>
+        <button class="hint-speak-btn" id="g3-hint-speak" data-fn="speakHint" data-arg="3">🔊</button>
       </div>
       <div class="hint-steps" id="g3-hint-steps"></div>
-      <div class="hint-btn-row"><button class="hint-trigger" id="g3-hint-btn" onclick="showNextHint(3)">💡 Show next hint</button></div>
+      <div class="hint-btn-row"><button class="hint-trigger" id="g3-hint-btn" data-fn="showNextHint" data-arg="3">💡 Show next hint</button></div>
     </div>
     <div class="letter-area">
       <div class="letter-area-label">Tap a filled box to undo a letter</div>
@@ -663,16 +663,16 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       <div class="letter-choices" id="g3-choices"></div>
     </div>
     <div class="btn-row" style="margin-bottom:10px;">
-      <button class="btn btn-clear" onclick="clearG3()">Clear</button>
-      <button class="btn btn-submit" onclick="submitG3()">Submit ✓</button>
-      <button class="btn btn-skip" onclick="skipQuestion(3)">Skip →</button>
+      <button class="btn btn-clear" data-fn="clearG3">Clear</button>
+      <button class="btn btn-submit" data-fn="submitG3">Submit ✓</button>
+      <button class="btn btn-skip" data-fn="skipQuestion" data-arg="3">Skip →</button>
     </div>
-    <button class="hint-open-btn" onclick="toggleHintPanel(3)">💡 Need a hint?</button>
+    <button class="hint-open-btn" data-fn="toggleHintPanel" data-arg="3">💡 Need a hint?</button>
     <div class="answer-box" id="g3-answer">
       <div class="verdict" id="g3-verdict"></div>
       <div class="the-word" id="g3-correct-text"></div>
       <div class="full-sent" id="g3-full-sent"></div>
-      <button class="btn btn-next" style="margin-top:13px;width:100%;" onclick="nextQuestion(3)">Next ➜</button>
+      <button class="btn btn-next" style="margin-top:13px;width:100%;" data-fn="nextQuestion" data-arg="3">Next ➜</button>
     </div>
   </div>
 </div>
@@ -680,7 +680,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 <!-- ══════════ GAME 4 — WORD SEARCH ══════════ -->
 <div id="game4" class="screen">
   <div class="game-header">
-    <button class="back-btn" onclick="goHome()">←</button>
+    <button class="back-btn" data-fn="goHome">←</button>
     <div class="game-title">🔍 Word Search</div>
     <div class="progress-wrap">
       <div class="progress-pill" id="g4-found">0 / 8 found</div>
@@ -690,8 +690,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
   <div class="game-content">
     <!-- Mode toggle -->
     <div class="ws-mode-row">
-      <button class="ws-mode-btn active" id="ws-btn-basic"    onclick="setWsMode('basic')">🔤 Basic ← only</button>
-      <button class="ws-mode-btn"        id="ws-btn-advanced" onclick="setWsMode('advanced')">🔀 Advanced ↔↕↗↘</button>
+      <button class="ws-mode-btn active" id="ws-btn-basic"    data-fn="setWsMode" data-arg="basic">🔤 Basic ← only</button>
+      <button class="ws-mode-btn"        id="ws-btn-advanced" data-fn="setWsMode" data-arg="advanced">🔀 Advanced ↔↕↗↘</button>
     </div>
     <!-- Words to find -->
     <div class="ws-word-list">
@@ -705,8 +705,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     </div>
     <!-- Controls -->
     <div class="btn-row" style="margin-bottom:12px;">
-      <button class="btn btn-primary" onclick="wsNewPuzzle()">🔀 New Puzzle</button>
-      <button class="btn btn-skip" onclick="goHome()">🏠 Home</button>
+      <button class="btn btn-primary" data-fn="wsNewPuzzle">🔀 New Puzzle</button>
+      <button class="btn btn-skip" data-fn="goHome">🏠 Home</button>
     </div>
     <!-- Completion overlay -->
     <div class="ws-complete" id="ws-complete">
@@ -714,8 +714,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       <div style="font-family:var(--title-f);font-size:1.6rem;color:var(--correct-col);">All words found!</div>
       <div style="font-size:.9rem;color:var(--text-sub);font-family:var(--body-f);">Amazing work! 🖤</div>
       <div class="btn-row" style="width:100%;margin-top:4px;">
-        <button class="btn btn-next" onclick="wsNewPuzzle()">🔀 Play Again</button>
-        <button class="btn btn-primary" onclick="goHome()">🏠 Home</button>
+        <button class="btn btn-next" data-fn="wsNewPuzzle">🔀 Play Again</button>
+        <button class="btn btn-primary" data-fn="goHome">🏠 Home</button>
       </div>
     </div>
   </div>
@@ -729,8 +729,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     <div class="results-score" id="results-score">0 / 8</div>
     <div class="results-msg" id="results-msg">Keep practising!</div>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <button class="btn btn-primary" onclick="goHome()">🏠 Choose Another Game</button>
-      <button class="btn btn-next" onclick="retryGame()">🔄 Play Again</button>
+      <button class="btn btn-primary" data-fn="goHome">🏠 Choose Another Game</button>
+      <button class="btn btn-next" data-fn="retryGame">🔄 Play Again</button>
     </div>
   </div>
 </div>
@@ -738,7 +738,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 <!-- ══════════ ADMIN PANEL ══════════ -->
 <div id="adminPanel">
   <div class="game-header">
-    <button class="back-btn" onclick="closeAdmin()">←</button>
+    <button class="back-btn" data-fn="closeAdmin">←</button>
     <div class="game-title">⚙️ Word List Editor</div>
   </div>
   <div class="admin-content">
@@ -753,10 +753,10 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 
         <!-- Provider toggle -->
         <div class="ocr-provider-row">
-          <button class="ocr-provider-btn active-gemini" id="ocr-btn-gemini" onclick="setOcrProvider('gemini')">
+          <button class="ocr-provider-btn active-gemini" id="ocr-btn-gemini" data-fn="setOcrProvider" data-arg="gemini">
             ✨ Gemini<br><span style="font-size:.7rem;font-weight:400;opacity:.8;">Free · No card needed</span>
           </button>
-          <button class="ocr-provider-btn" id="ocr-btn-claude" onclick="setOcrProvider('claude')">
+          <button class="ocr-provider-btn" id="ocr-btn-claude" data-fn="setOcrProvider" data-arg="claude">
             🤖 Claude<br><span style="font-size:.7rem;font-weight:400;opacity:.8;">~$0.01/call</span>
           </button>
         </div>
@@ -766,7 +766,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
           <p class="ocr-note">Get a <strong>free</strong> key at <strong>aistudio.google.com</strong> → Get API Key. No credit card needed. 1,500 free calls/day.</p>
           <div class="ocr-key-row">
             <input type="password" id="ocrGeminiKey" class="ocr-key-input" placeholder="AIzaSy…" autocomplete="off" autocorrect="off" autocapitalize="off">
-            <button class="ocr-key-save" onclick="ocrSaveKey('gemini')">Save</button>
+            <button class="ocr-key-save" data-fn="ocrSaveKey" data-arg="gemini">Save</button>
           </div>
         </div>
 
@@ -775,7 +775,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
           <p class="ocr-note">Get a key at <strong>console.anthropic.com</strong> → API Keys. Requires adding credits (~$5 min, lasts months at weekly use).</p>
           <div class="ocr-key-row">
             <input type="password" id="ocrClaudeKey" class="ocr-key-input" placeholder="sk-ant-api03-…" autocomplete="off" autocorrect="off" autocapitalize="off">
-            <button class="ocr-key-save" onclick="ocrSaveKey('claude')">Save</button>
+            <button class="ocr-key-save" data-fn="ocrSaveKey" data-arg="claude">Save</button>
           </div>
         </div>
 
@@ -795,7 +795,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       <!-- Step 3: Extract -->
       <div class="ocr-step">
         <div class="ocr-step-title"><span class="ocr-step-num">3</span>Extract words automatically</div>
-        <button class="btn btn-submit" id="ocrExtractBtn" onclick="ocrExtract()" style="width:100%;">
+        <button class="btn btn-submit" id="ocrExtractBtn" data-fn="ocrExtract" style="width:100%;">
           🔍 Extract Words from Photo
         </button>
         <div class="ocr-status" id="ocrStatus"></div>
@@ -809,8 +809,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
           <input type="text" id="ocrTaskNameInput" class="ocr-field-input" placeholder="e.g. T3 Wk5 Task 4">
           <div id="ocrReviewRows"></div>
           <div class="btn-row" style="margin-top:4px;">
-            <button class="btn btn-submit" onclick="ocrLoadIntoGame()">✅ Load into Game</button>
-            <button class="btn btn-clear" onclick="ocrAddRow()">＋ Add Row</button>
+            <button class="btn btn-submit" data-fn="ocrLoadIntoGame">✅ Load into Game</button>
+            <button class="btn btn-clear" data-fn="ocrAddRow">＋ Add Row</button>
           </div>
         </div>
       </div>
@@ -836,8 +836,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       <div id="adminError" class="admin-error"></div>
       <div id="adminSuccess" class="admin-success"></div>
       <div class="btn-row">
-        <button class="btn btn-submit" onclick="previewWordList()">👁️ Preview</button>
-        <button class="btn btn-clear" onclick="clearAdminPaste()">Clear</button>
+        <button class="btn btn-submit" data-fn="previewWordList">👁️ Preview</button>
+        <button class="btn btn-clear" data-fn="clearAdminPaste">Clear</button>
       </div>
     </div>
 
@@ -846,8 +846,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       <h3>👁️ Preview — check before saving</h3>
       <div id="adminPreviewList"></div>
       <div class="btn-row" style="margin-top:14px;">
-        <button class="btn btn-submit" onclick="saveWordList()">✅ Save &amp; Apply</button>
-        <button class="btn btn-skip" onclick="cancelPreview()">Cancel</button>
+        <button class="btn btn-submit" data-fn="saveWordList">✅ Save &amp; Apply</button>
+        <button class="btn btn-skip" data-fn="cancelPreview">Cancel</button>
       </div>
     </div>
 
@@ -856,7 +856,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
       <h3>📥 Share with Everyone (GitHub)</h3>
       <p style="font-size:.84rem;color:var(--text-sub);font-family:var(--body-f);margin-bottom:6px;line-height:1.65;">After updating your word list, download the file and upload it to GitHub — everyone with your link gets the new words.</p>
       <p style="font-size:.78rem;color:var(--text-muted);font-family:var(--body-f);margin-bottom:12px;line-height:1.6;">Steps: Download → rename to <strong>index.html</strong> → GitHub → tap file → ✏️ → upload → Commit</p>
-      <button class="btn btn-next" id="downloadBtn" onclick="downloadUpdatedFile()" style="width:100%;padding:14px;">📥 Download Updated index.html</button>
+      <button class="btn btn-next" id="downloadBtn" data-fn="downloadUpdatedFile" style="width:100%;padding:14px;">📥 Download Updated index.html</button>
       <div id="downloadMsg" style="margin-top:10px;font-size:.84rem;font-family:var(--body-f);color:var(--correct-col);display:none;"></div>
     </div>
 
@@ -1690,7 +1690,7 @@ function wsRender(){
     const uw=q.word.toUpperCase(), found=wsFoundWords.has(uw);
     const col=WS_COLORS[i%WS_COLORS.length];
     return `<span class="ws-chip${found?' found':''}" id="ws-chip-${i}"
-      onclick="wsHint(${i})"
+      data-fn="wsHint" data-arg="${i}"
       style="${found?`background:${col};color:#1a1a2e;border-color:${col};`:''}">
       ${q.word}${found?' ✓':''}
     </span>`;
@@ -1960,8 +1960,4 @@ Rules:
     if(isGemini){
       // ── Google Gemini ──
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
-        {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(
+        `https://generativelanguage.googleapi
