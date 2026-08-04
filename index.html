@@ -522,6 +522,17 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
     <div class="game-card" data-fn="startGame" data-arg="3"><div class="icon">🔤</div><div><h2>Letter Detective</h2><p>Tap letters to spell the missing word</p></div></div>
     <div class="game-card" data-fn="startGame4"><div class="icon">🔍</div><div><h2>Word Search</h2><p>Find all the spelling words in the grid</p></div></div>
   </div>
+
+  <!-- ── DIAGNOSTIC PANEL — shows live JS + click status on screen ── -->
+  <div id="diagPanel" style="margin-top:18px;width:100%;max-width:430px;background:rgba(0,0,0,.75);border-radius:12px;padding:12px 16px;font-family:monospace;font-size:12px;line-height:1.8;color:#aaa;">
+    <div style="color:white;font-weight:bold;margin-bottom:4px;">🔧 Live Debug</div>
+    <div id="d-js">⬛ JS: not yet run</div>
+    <div id="d-click">⬛ Clicks: none detected</div>
+    <div id="d-fn">⬛ Last data-fn: —</div>
+    <div id="d-sg">⬛ startGame: not called</div>
+    <div id="d-err" style="color:#ff8888;word-break:break-all;"></div>
+    <div style="margin-top:6px;color:#666;font-size:10px;">Tap anywhere after loading — report what you see here</div>
+  </div>
 </div>
 
 <!-- ══════════ GAME 1 ══════════ -->
@@ -1935,29 +1946,4 @@ async function ocrExtract(){
   btn.textContent='⏳ Reading photo…'; btn.disabled=true;
   ocrShowStatus(`🔍 Sending to ${isGemini?'Google Gemini':'Claude AI'} — please wait…`,'info');
 
-  const PROMPT = `Extract the spelling word list from this worksheet image.
-Look for words that are underlined or in bold in the sentences.
-
-Return ONLY a valid JSON object — no markdown, no explanation, nothing else:
-{
-  "taskName": "T3 Wk6 Task 5",
-  "words": [
-    {"word":"example","sentence":"The ___ fits here.","hint":"Short child-friendly clue with emoji"},
-    ...
-  ]
-}
-
-Rules:
-- Replace each spelling word in its sentence with ___
-- "word" must be lowercase
-- Write a simple friendly hint for a 7-year-old child
-- Extract the task name from the header if visible
-- Include every word in the list`;
-
-  try{
-    let raw = '';
-
-    if(isGemini){
-      // ── Google Gemini ──
-      const res = await fetch(
-        `https://generativelanguage.googleapi
+  const P
