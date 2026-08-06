@@ -875,6 +875,11 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 </div>
 
 <script>
+// ── DIAGNOSTIC: runs immediately — confirms JS executed ──────────────
+(function(){
+  var d = document.getElementById('d-js');
+  if(d) { d.textContent = '✅ JS: RUNNING'; d.style.color = '#4ade80'; }
+})();
 // ════════════════════════════════════════════
 // DEFAULT WORD LIST (loaded if nothing saved)
 // ════════════════════════════════════════════
@@ -1222,6 +1227,8 @@ function sentLabel(){
 // START GAME
 // ════════════════════════════════════════════
 function startGame(num){
+  var ds=document.getElementById('d-sg'), de=document.getElementById('d-err');
+  if(ds){ ds.textContent='🔄 startGame('+num+') called…'; ds.style.color='#facc15'; }
   try{
     currentGame=num; currentRetry=num; currentIdx=0;
     scores[num-1]=0; hintCounts={}; hintTexts={};
@@ -1229,7 +1236,10 @@ function startGame(num){
     if(num===1){ initCanvas(); renderG1(); showScreen('game1'); }
     else if(num===2){ renderG2(); showScreen('game2'); }
     else { renderG3(); showScreen('game3'); }
+    if(ds){ ds.textContent='✅ startGame('+num+') OK — screen shown'; ds.style.color='#4ade80'; }
   }catch(err){
+    if(ds){ ds.textContent='❌ startGame ERROR: '+err.message; ds.style.color='#f87171'; }
+    if(de){ de.textContent=err.stack||err.message; }
     console.error('startGame error:', err);
   }
 }
@@ -1933,17 +1943,4 @@ function ocrHideStatus(){
 async function ocrExtract(){
   const isGemini = ocrProvider === 'gemini';
   const storeKey = isGemini ? 'gemini_api_key' : 'anthropic_api_key';
-  const inputId  = isGemini ? 'ocrGeminiKey' : 'ocrClaudeKey';
-  const apiKey   = localStorage.getItem(storeKey) || document.getElementById(inputId).value.trim();
-
-  if(!apiKey){
-    ocrShowStatus(`❌ Please enter and save your ${isGemini?'Gemini':'Claude'} API key (Step 1).`,'error'); return;
-  }
-  if(!ocrImageB64){
-    ocrShowStatus('❌ Please upload a photo first (Step 2).','error'); return;
-  }
-  const btn = document.getElementById('ocrExtractBtn');
-  btn.textContent='⏳ Reading photo…'; btn.disabled=true;
-  ocrShowStatus(`🔍 Sending to ${isGemini?'Google Gemini':'Claude AI'} — please wait…`,'info');
-
-  const P
+  const
