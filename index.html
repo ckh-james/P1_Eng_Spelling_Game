@@ -874,6 +874,19 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
   </div>
 </div>
 
+
+<script>
+window.onerror = function(msg, url, line, col, error) {
+  var d = document.getElementById('d-js');
+  if (d) {
+    d.textContent = '❌ SYNTAX ERROR: ' + msg + ' (line ' + line + ', col ' + col + ')';
+    d.style.color = '#f87171';
+    d.style.wordBreak = 'break-all';
+  }
+  return false;
+};
+</script>
+     
 <script>
 // ── DIAGNOSTIC: runs immediately — confirms JS executed ──────────────
 (function(){
