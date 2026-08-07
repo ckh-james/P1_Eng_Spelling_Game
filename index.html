@@ -874,19 +874,6 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
   </div>
 </div>
 
-
-<script>
-window.onerror = function(msg, url, line, col, error) {
-  var d = document.getElementById('d-js');
-  if (d) {
-    d.textContent = '❌ SYNTAX ERROR: ' + msg + ' (line ' + line + ', col ' + col + ')';
-    d.style.color = '#f87171';
-    d.style.wordBreak = 'break-all';
-  }
-  return false;
-};
-</script>
-     
 <script>
 // ── DIAGNOSTIC: runs immediately — confirms JS executed ──────────────
 (function(){
@@ -1956,4 +1943,312 @@ function ocrHideStatus(){
 async function ocrExtract(){
   const isGemini = ocrProvider === 'gemini';
   const storeKey = isGemini ? 'gemini_api_key' : 'anthropic_api_key';
-  const
+  const inputId  = isGemini ? 'ocrGeminiKey' : 'ocrClaudeKey';
+  const apiKey   = localStorage.getItem(storeKey) || document.getElementById(inputId).value.trim();
+
+  if(!apiKey){
+    ocrShowStatus(`❌ Please enter and save your ${isGemini?'Gemini':'Claude'} API key (Step 1).`,'error'); return;
+  }
+  if(!ocrImageB64){
+    ocrShowStatus('❌ Please upload a photo first (Step 2).','error'); return;
+  }
+  const btn = document.getElementById('ocrExtractBtn');
+  btn.textContent='⏳ Reading photo…'; btn.disabled=true;
+  ocrShowStatus(`🔍 Sending to ${isGemini?'Google Gemini':'Claude AI'} — please wait…`,'info');
+
+  const PROMPT = `Extract the spelling word list from this worksheet image.
+Look for words that are underlined or in bold in the sentences.
+
+Return ONLY a valid JSON object — no markdown, no explanation, nothing else:
+{
+  "taskName": "T3 Wk6 Task 5",
+  "words": [
+    {"word":"example","sentence":"The ___ fits here.","hint":"Short child-friendly clue with emoji"},
+    ...
+  ]
+}
+
+Rules:
+- Replace each spelling word in its sentence with ___
+- "word" must be lowercase
+- Write a simple friendly hint for a 7-year-old child
+- Extract the task name from the header if visible
+- Include every word in the list`;
+
+  try{
+    let raw = '';
+
+    if(isGemini){
+      // ── Google Gemini ──
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+        {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            contents:[{parts:[
+              {inline_data:{mime_type:'image/jpeg', data:ocrImageB64}},
+              {text: PROMPT}
+            ]}],
+            generationConfig:{temperature:0.1, maxOutputTokens:1500}
+          })
+        }
+      );
+      if(!res.ok){
+        const err=await res.json().catch(()=>({}));
+        throw new Error(err.error?.message || `Gemini error ${res.status} — check your API key`);
+      }
+      const data = await res.json();
+      raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    } else {
+      // ── Anthropic Claude ──
+      const res = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body: JSON.stringify({
+          model:'claude-sonnet-4-6',
+          max_tokens:1500,
+          messages:[{role:'user', content:[
+            {type:'image', source:{type:'base64',media_type:'image/jpeg',data:ocrImageB64}},
+            {type:'text', text:PROMPT}
+          ]}]
+        })
+      });
+      if(!res.ok){
+        const err=await res.json().catch(()=>({}));
+        throw new Error(err.error?.message || `Claude error ${res.status} — check your API key`);
+      }
+      const data = await res.json();
+      raw = data.content?.find(b=>b.type==='text')?.text || '';
+    }
+
+    // ── Parse JSON from response ──
+    const clean = raw.replace(/```json|```/g,'').trim();
+    let parsed;
+    try{ parsed=JSON.parse(clean); }
+    catch(e){ throw new Error('Could not parse the response. Please try again.'); }
+
+    if(!Array.isArray(parsed?.words)||parsed.words.length===0){
+      throw new Error('No words found. Make sure the photo is clear and try again.');
+    }
+
+    // ── Show review step ──
+    if(parsed.taskName) document.getElementById('ocrTaskNameInput').value=parsed.taskName;
+    ocrBuildReview(parsed.words);
+    document.getElementById('ocrReviewSection').style.display='block';
+    document.getElementById('ocrReviewSection').scrollIntoView({behavior:'smooth'});
+    ocrShowStatus(`✅ Found ${parsed.words.length} words! Review below, then tap "Load into Game".`,'success');
+
+  }catch(e){
+    ocrShowStatus(`❌ ${e.message}`,'error');
+  }finally{
+    btn.textContent='🔍 Extract Words from Photo'; btn.disabled=false;
+  }
+}
+
+/* ── Build review rows ── */
+function ocrBuildReview(words){
+  const container=document.getElementById('ocrReviewRows');
+  container.innerHTML='';
+  ocrRowCounter=0;
+  words.forEach((item,i)=>ocrAddReviewRow(i, item.word||'', item.sentence||'', item.hint||''));
+}
+
+function ocrAddRow(){
+  const n=document.querySelectorAll('.ocr-review-row').length;
+  ocrAddReviewRow(n,'','','');
+  document.querySelectorAll('.ocr-review-row:last-child')[0]?.scrollIntoView({behavior:'smooth'});
+}
+
+function ocrAddReviewRow(num, word, sentence, hint){
+  const id=ocrRowCounter++;
+  const div=document.createElement('div');
+  div.className='ocr-review-row'; div.id=`ocr-row-${id}`;
+  // Escape values for HTML attributes
+  const esc=s=>s.replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  div.innerHTML=`
+    <div class="ocr-row-header">
+      <span class="ocr-row-label">Word ${num+1}</span>
+      <button class="ocr-row-del" data-fn="removeOcrRow" data-arg="${id}">✕ Remove</button>
+    </div>
+    <div class="ocr-field-label">Spelling Word</div>
+    <input class="ocr-field-input" data-field="word" value="${esc(word)}" placeholder="e.g. teacher" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div class="ocr-field-label">Sentence — use ___ for the blank</div>
+    <input class="ocr-field-input" data-field="sentence" value="${esc(sentence)}" placeholder='e.g. My ___ is very kind.'>
+    <div class="ocr-field-label">Hint (optional)</div>
+    <input class="ocr-field-input" data-field="hint" value="${esc(hint)}" placeholder="e.g. A person who teaches at school 👩‍🏫">
+  `;
+  document.getElementById('ocrReviewRows').appendChild(div);
+}
+
+/* ── Load reviewed words into game ── */
+function ocrLoadIntoGame(){
+  const rows=document.querySelectorAll('.ocr-review-row');
+  if(rows.length===0){ ocrShowStatus('❌ No words to load. Please extract words first.','error'); return; }
+
+  const words=[]; let hasErr=false;
+  rows.forEach((row,i)=>{
+    const word    = row.querySelector('[data-field="word"]').value.trim().toLowerCase();
+    const sentence= row.querySelector('[data-field="sentence"]').value.trim();
+    const hint    = row.querySelector('[data-field="hint"]').value.trim();
+    if(!word){ ocrShowStatus(`❌ Row ${i+1}: Word cannot be empty.`,'error'); hasErr=true; return; }
+    if(!sentence){ ocrShowStatus(`❌ Row ${i+1}: Sentence for "${word}" is missing.`,'error'); hasErr=true; return; }
+    if(!sentence.includes('___')){ ocrShowStatus(`❌ Row ${i+1}: Sentence for "${word}" must contain ___ where the blank goes.`,'error'); hasErr=true; return; }
+    words.push({word, sentence, hint});
+  });
+  if(hasErr||!words.length) return;
+
+  const taskName = document.getElementById('ocrTaskNameInput').value.trim()||'Spelling List';
+
+  // Persist
+  try{
+    localStorage.setItem('spelling_words', JSON.stringify(words));
+    localStorage.setItem('spelling_taskname', taskName);
+  }catch(e){ ocrShowStatus('❌ Could not save — storage may be full.','error'); return; }
+
+  // Apply live
+  currentTaskName=taskName;
+  QUESTIONS=words.map(item=>({word:item.word,sentence:item.sentence,hints:buildHintsFromItem(item),_raw:item}));
+  updateHomeUI();
+
+  // Refresh current list display
+  document.getElementById('adminCurrentList').innerHTML=QUESTIONS.map((q,i)=>
+    `<div class="admin-word-row">
+      <span class="admin-num">${i+1}</span>
+      <span class="admin-word">${q.word}</span>
+      <span class="admin-sent">${q.sentence}</span>
+    </div>`).join('');
+
+  // Also sync task name field in manual section
+  document.getElementById('adminTaskName').value=taskName;
+
+  document.getElementById('ocrReviewSection').style.display='none';
+  ocrShowStatus(`✅ ${words.length} words loaded! Go play 🎮`,'success');
+}
+
+// ════════════════════════════════════════════
+// CENTRAL CLICK DISPATCHER
+// Replaces ALL inline onclick="..." HTML attributes.
+// Inline event handlers can be silently blocked by browser security
+// policies on HTTPS (e.g. GitHub Pages CSP) while <script> blocks
+// and addEventListener remain fully functional.
+// Every interactive element uses data-fn + optional data-arg instead.
+// ════════════════════════════════════════════
+document.addEventListener('click', function(e){
+  // ── Diagnostic: update click indicator ──
+  var dc = document.getElementById('d-click');
+  var df = document.getElementById('d-fn');
+  if(dc){ dc.textContent = '✅ CLICK DETECTED on: ' + e.target.tagName; dc.style.color='#4ade80'; }
+
+  const el = e.target.closest('[data-fn]');
+  if(df){ df.textContent = el ? ('✅ data-fn: ' + el.dataset.fn + (el.dataset.arg ? '('+el.dataset.arg+')' : '')) : '⬛ No data-fn on: '+e.target.tagName; df.style.color = el ? '#4ade80' : '#facc15'; }
+  if(!el) return;
+  const fn  = el.dataset.fn;
+  const arg = el.dataset.arg;
+  switch(fn){
+    case 'toggleTheme':       toggleTheme();                              break;
+    case 'startGame':         startGame(parseInt(arg));                   break;
+    case 'startGame4':        startGame4();                               break;
+    case 'goHome':            goHome();                                   break;
+    case 'closeAdmin':        closeAdmin();                               break;
+    case 'retryGame':         retryGame();                                break;
+    case 'setG1Mode':         setG1Mode(arg);                             break;
+    case 'clearCanvas':       clearCanvas();                              break;
+    case 'submitG1':          submitG1();                                 break;
+    case 'submitG1Type':      submitG1Type();                             break;
+    case 'skipQuestion':      skipQuestion(parseInt(arg));                break;
+    case 'nextQuestion':      nextQuestion(parseInt(arg));                break;
+    case 'toggleHintPanel':   toggleHintPanel(parseInt(arg));             break;
+    case 'showNextHint':      showNextHint(parseInt(arg));                break;
+    case 'speakSentence':     speakText('sentence', parseInt(arg));       break;
+    case 'speakHint':         speakText('hint', parseInt(arg));           break;
+    case 'clearG3':           clearG3();                                  break;
+    case 'submitG3':          submitG3();                                 break;
+    case 'setWsMode':         setWsMode(arg);                             break;
+    case 'wsNewPuzzle':       wsNewPuzzle();                              break;
+    case 'wsHint':            wsHint(parseInt(arg));                      break;
+    case 'setOcrProvider':    setOcrProvider(arg);                        break;
+    case 'ocrSaveKey':        ocrSaveKey(arg);                            break;
+    case 'ocrExtract':        ocrExtract();                               break;
+    case 'ocrAddRow':         ocrAddRow();                                break;
+    case 'ocrLoadIntoGame':   ocrLoadIntoGame();                          break;
+    case 'previewWordList':   previewWordList();                          break;
+    case 'clearAdminPaste':   clearAdminPaste();                          break;
+    case 'saveWordList':      saveWordList();                             break;
+    case 'cancelPreview':     cancelPreview();                            break;
+    case 'downloadUpdatedFile': downloadUpdatedFile();                    break;
+    case 'removeOcrRow': {
+      const row = document.getElementById(arg);
+      if(row) row.remove();
+      break;
+    }
+  }
+});
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+window.addEventListener('resize',()=>{
+  if(currentGame===1){ const c=document.getElementById('g1Canvas'); if(c){c.width=Math.min(560,window.innerWidth-36);drawLines(c);} }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&currentGame===1&&g1Mode==='type') submitG1Type();
+});
+// iOS: resume speech when tab returns to foreground
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&window.speechSynthesis) window.speechSynthesis.resume();
+});
+// Preload voices (needed on some iOS versions)
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  if(window.speechSynthesis.onvoiceschanged!==undefined){
+    window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
+  }
+}
+// ── Kuromi tap unlock ──────────────────────
+// FIX: pointerdown+preventDefault on HTTPS (GitHub Pages) suppresses
+// subsequent click events across the whole page in Chrome.
+// Solution: use 'click' for mouse, 'touchend' for touch separately.
+// touchend.preventDefault() only stops the ghost-click that follows
+// touch — it does NOT affect other elements' click handlers.
+(function(){
+  const area = document.getElementById('kuromTapArea');
+  if(!area) return;
+  let lastEvt = 0;
+  function handleTap(){
+    const now = Date.now();
+    if(now - lastEvt < 350) return; // debounce double-fire
+    lastEvt = now;
+    kuromTap();
+  }
+  // Desktop mouse → click
+  area.addEventListener('click', handleTap);
+  // Mobile touch → touchend (preventDefault stops ghost click only)
+  area.addEventListener('touchend', function(e){
+    e.preventDefault();
+    handleTap();
+  }, {passive: false});
+})();
+// Load saved word list on startup
+loadWordList();
+// ── Global error catcher (shows JS errors as a banner for debugging) ──
+window.addEventListener('error', function(e){
+  const d = document.createElement('div');
+  d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#ff6b6b;color:white;padding:10px 14px;font-size:12px;font-family:monospace;word-break:break-all;';
+  d.textContent = '⚠️ JS Error: ' + e.message + ' (line ' + e.lineno + ')';
+  const close = document.createElement('span');
+  close.textContent = ' ✕';
+  close.style.cssText = 'float:right;cursor:pointer;font-weight:bold;';
+  close.onclick = () => d.remove();
+  d.appendChild(close);
+  document.body.appendChild(d);
+});
+</script>
+</body>
+</html>
