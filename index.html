@@ -504,7 +504,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 
   <h1>Kuromi's Spelling Quest</h1>
   <p class="subtitle" id="homeSubtitle">8 words · 4 spooky-cute games 🖤</p>
-  <div class="task-chip" id="homeTaskChip">📋 T3 Wk6 Task 5 — Spelling List</div>
+  <div class="task-chip" id="homeTaskChip">📋 T3 Wk7 Task 6 — Spelling List</div>
 
   <div class="word-preview">
     <h3>🔑 Today's words</h3>
@@ -875,19 +875,19 @@ canvas{display:block;touch-action:none;cursor:crosshair;background:var(--canvas-
 // DEFAULT WORD LIST (loaded if nothing saved)
 // ════════════════════════════════════════════
 const DEFAULT_WORDS = [
-  {word:"hurry",     sentence:"Johnny ran off in a ___.",                                     hint:"To move or do something very quickly ⚡"},
-  {word:"clothes",   sentence:"I dirtied my ___ again.",                                      hint:"Things you wear on your body like shirts and pants 👕"},
-  {word:"mine",      sentence:"The book on the table is ___.",                                hint:"Belonging to me — the opposite of yours 🙋"},
-  {word:"pockets",   sentence:"There is nothing in my ___.",                                  hint:"Small pouches sewn into clothing to hold things 👖"},
-  {word:"breakfast", sentence:"What did you have for ___ today?",                            hint:"The first meal of the day eaten in the morning 🍳"},
-  {word:"thanked",   sentence:"Siti ___ her aunty for giving her green packets.",            hint:"She said thank you and showed she was grateful 🙏"},
-  {word:"our",       sentence:"My family decorated ___ house to celebrate Hari Raya.",       hint:"Belonging to us — me and my family 🏠"},
-  {word:"visited",   sentence:"We ___ our grandparents on the first day of Hari Raya.",     hint:"We went to see someone at their home 👴👵"}
+  {word:"love",    sentence:"I ___ chocolate milkshake.",                                  hint:"To like someone or something very much ❤️"},
+  {word:"drank",   sentence:"I ___ two packets of fresh milk.",                            hint:"Past tense of drink — swallowed a liquid 🥛"},
+  {word:"kiss",    sentence:"My parents ___ me on my forehead.",                           hint:"To touch gently with your lips to show love 😘"},
+  {word:"kneel",   sentence:"I ___ down to pat the cat.",                                  hint:"To bend your knees and lower yourself to the ground 🧎"},
+  {word:"make",    sentence:"My mother helped me to ___ fruit tarts.",                     hint:"To create or prepare something 🎂"},
+  {word:"rainbow", sentence:"There is a pot of gold at the end of the ___.",                hint:"A colorful arc of colors in the sky after rain 🌈"},
+  {word:"met",     sentence:"The guests smiled widely when they ___ one another.",         hint:"Past tense of meet — came together with someone 🤝"},
+  {word:"naughty", sentence:"The ___ boys were caught bullying other students.",           hint:"Behaving badly or not listening to rules 😈"}
 ];
 
 // QUESTIONS is mutable — overwritten by loadWordList() on startup
 let QUESTIONS = [];
-let currentTaskName = 'T3 Wk6 Task 5';
+let currentTaskName = 'T3 Wk7 Task 6';
 
 // ════════════════════════════════════════════
 // BUILD HINTS from stored item
@@ -1972,7 +1972,7 @@ Rules:
     if(isGemini){
       // ── Google Gemini ──
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
         {
           method:'POST',
           headers:{'Content-Type':'application/json'},
